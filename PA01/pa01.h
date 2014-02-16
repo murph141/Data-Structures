@@ -9,6 +9,9 @@ void Shell_Selection_Sort(long *, int, double *, double *);
 
 int Print_Seq(char *, int);
 
-int validate_numbers(FILE *);
+int Validate_Numbers(FILE *);
+int Highest_Power(int);
+int Number_Of_Elements(int);
+int Calculate_Number(int, int);
 
 #endif /* PA01_H */

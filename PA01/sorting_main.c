@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 #include "pa01.h"
 
 int main(int argc, char * argv[])
@@ -10,30 +11,34 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  //const char * method = argv[1];
-  const char * input_file = argv[2];
-  //const char * sequence_file = argv[3];
-  //const char * output_file = argv[4];
+  //char * method = argv[1];
+  char * input_file = argv[2];
+  char * sequence_file = argv[3];
+  //char * output_file = argv[4];
 
-  FILE * iptr = fopen(input_file, "r+");
+  int Size;
+  long * values;
 
-  if(iptr == NULL)
+  values = Load_File(input_file, &Size);
+
+  if(values == NULL)
   {
-    printf("Error opening input file\n");
     return EXIT_FAILURE;
   }
 
-  int valid = validate_numbers(iptr);
+  //clock_t initial_time, after_sequence;
 
-  if(valid)
+  //initial_time = clock();
+  // NEED TO FREE AFTER THIS POINT
+  int i = Print_Seq(sequence_file, Size);
+  
+  if(i == 0)
   {
-    printf("Number of items scanned does not equal number of items specified\n");
+    printf("Failed to print sequence\n");
+    free(values);
     return EXIT_FAILURE;
   }
 
-  int * Size;
-  Load_File(input_file, Size);
-  // FCLOSE
-  fclose(iptr);
-  return 0;
+
+  return EXIT_SUCCESS;
 }
