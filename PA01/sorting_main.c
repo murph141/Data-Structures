@@ -11,7 +11,7 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  //char * method = argv[1];
+  char method = * argv[1];
   char * input_file = argv[2];
   char * sequence_file = argv[3];
   //char * output_file = argv[4];
@@ -39,6 +39,22 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+
+  // Check for the sorting method chosen by the user
+  if(method == 'i')
+  {
+    Shell_Insertion_Sort(values, Size, N_Comp, N_Move);
+  }
+  else if(method == 's')
+  {
+    Shell_Selection_Sort(values, Size, N_Comp, N_Move);
+  }
+  else
+  {
+    printf("Sorting method must be either i (Insertion) or s (Selection) sort\n");
+    free(values);
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

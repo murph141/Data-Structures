@@ -59,6 +59,46 @@ long * Load_File(char * filename, int * Size)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int Print_Seq(char * filename, int size)
 {
   FILE * sptr = fopen(filename, "w");
@@ -78,17 +118,14 @@ int Print_Seq(char * filename, int size)
   int number = Number_Of_Elements(n);
 
   fprintf(sptr, "%d\n", number);
-  //int triangle[number];
 
   int i, j; 
-  //int count = 0;
 
   for(i = 0; i <= n; i++)
   {
     for(j = 0; j <= i; j++)
     {
       fprintf(sptr, "%d\n", Calculate_Number(i -j, j));
-      //triangle[count++] = Calculate_Number(i - j, j);
     }
   }
       
