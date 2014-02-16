@@ -40,14 +40,16 @@ int main(int argc, char * argv[])
   }
 
 
+  double N_Comp = 0.0, N_Move = 0.0;
+
   // Check for the sorting method chosen by the user
   if(method == 'i')
   {
-    Shell_Insertion_Sort(values, Size, N_Comp, N_Move);
+    Shell_Insertion_Sort(values, Size, &N_Comp, &N_Move);
   }
   else if(method == 's')
   {
-    Shell_Selection_Sort(values, Size, N_Comp, N_Move);
+    Shell_Selection_Sort(values, Size, &N_Comp, &N_Move);
   }
   else
   {
@@ -55,6 +57,8 @@ int main(int argc, char * argv[])
     free(values);
     return EXIT_FAILURE;
   }
+
+  free(values);
 
   return EXIT_SUCCESS;
 }

@@ -14,4 +14,6 @@ int Highest_Power(int);
 int Number_Of_Elements(int);
 int Calculate_Number(int, int);
 
+int * Generate_Sequence(int);
+
 #endif /* PA01_H */

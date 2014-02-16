@@ -173,3 +173,61 @@ int Calculate_Number(int i, int j)
 
   return number;
 }
+
+
+
+
+int * Generate_Sequence(int size)
+{
+  int n = Highest_Power(size);
+
+  if(n < 0)
+  {
+    return NULL;
+  }
+
+  int number = Number_Of_Elements(n);
+
+  int * sequence = malloc(sizeof(int) * number);
+
+  int i, j, count = 0; 
+
+  for(i = 0; i <= n; i++)
+  {
+    for(j = 0; j <= i; j++)
+    {
+      sequence[count++] = Calculate_Number(i -j, j);
+    }
+  }
+      
+  return sequence;
+}
+
+
+
+void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Move)
+{
+  * N_Comp = 0.0;
+  * N_Move = 0.0;
+
+  int * sequence = Generate_Sequence(size);
+
+  int number = Number_Of_Elements(Highest_Power(size));
+
+  //int i, j, k, temp;
+  int i, temp;
+
+  for(i = number - 1; i >= 0; i--)
+  {
+    temp = sequence[i];
+  }
+
+  free(sequence);
+}
+
+
+
+
+void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Move)
+{
+}
