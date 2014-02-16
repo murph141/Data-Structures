@@ -74,20 +74,21 @@ int Print_Seq(char * filename, int size)
   {
     return 0;
   }
-  //fprintf(sptr, "%d\n", size);
 
   int number = Number_Of_Elements(n);
 
-  int triangle[number];
+  fprintf(sptr, "%d\n", number);
+  //int triangle[number];
 
-  int i, j, count = 0;
+  int i, j; 
+  //int count = 0;
 
   for(i = 0; i <= n; i++)
   {
     for(j = 0; j <= i; j++)
     {
-      triangle[count++] = Calculate_Number(i - j, j);
-      printf("%d\n", triangle[count - 1]);
+      fprintf(sptr, "%d\n", Calculate_Number(i -j, j));
+      //triangle[count++] = Calculate_Number(i - j, j);
     }
   }
       
@@ -132,8 +133,6 @@ int Calculate_Number(int i, int j)
   {
     number *= 3;
   }
-
-  //printf("%d\n", number);
 
   return number;
 }
