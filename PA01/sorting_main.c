@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
   char method = * argv[1];
   char * input_file = argv[2];
   char * sequence_file = argv[3];
-  //char * output_file = argv[4];
+  char * output_file = argv[4];
 
   int Size;
   long * values;
@@ -23,6 +23,7 @@ int main(int argc, char * argv[])
 
   if(values == NULL)
   {
+    printf("Error loading the file\n");
     return EXIT_FAILURE;
   }
 
@@ -58,7 +59,31 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+  int returned = Save_File(output_file, values, Size);
+
+  if (!returned)
+  {
+    printf("Failed to output values to file\n");
+    free(values);
+    return EXIT_FAILURE;
+  }
+  else if(returned != Size)
+  {
+    printf("Number of values returned not equal to number of values specified\n");
+    free(values);
+    return EXIT_FAILURE;
+  }
+  
   free(values);
 
   return EXIT_SUCCESS;
 }
+
+/*
+ *
+ * TO DO:
+ * 
+ * Take care of comparisons and moves
+ * Free? (Possibly)
+ * Output results to file
+ */

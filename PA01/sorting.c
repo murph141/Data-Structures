@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include "pa01.h"
 
 //Validates whether the number given in the input file specifies
@@ -50,7 +51,10 @@ long * Load_File(char * filename, int * Size)
 
   for(i = 0; i < (* Size); i++)
   {
-    fscanf(iptr, "%li", values + i);
+    if(fscanf(iptr, "%li", values + i) != 1)
+    {
+      return NULL;
+    }
   }
 
   fclose(iptr);
@@ -61,10 +65,46 @@ long * Load_File(char * filename, int * Size)
 
 
 
+int Save_File(char * filename, long * array, int Size)
+{
+  FILE * optr = fopen(filename, "w");
+
+  if (optr == NULL)
+  {
+    return 0;
+  }
+
+  fprintf(optr, "%d\n", Size);
+
+  int i = 0, returned = 0;
+
+  for(; i < Size; i++)
+  {
+    if(fprintf(optr, "%li\n", array[i]) == The_Size(array[i]))
+    {
+      returned++;
+    }
+  }
+
+  fclose(optr);
+
+  return Size;
+}
 
 
 
+int The_Size(long num)
+{
+  int i = 0;
 
+  while(num > 0)
+  {
+    num /= 10;
+    i++;
+  }
+
+  return i;
+}
 
 
 
@@ -214,12 +254,12 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
   int number = Number_Of_Elements(Highest_Power(size));
 
-  //int i, j, k, temp;
   int i, temp;
 
   for(i = number - 1; i >= 0; i--)
   {
     temp = sequence[i];
+    printf("%d\n", temp);
   }
 
   free(sequence);

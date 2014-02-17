@@ -15,5 +15,6 @@ int Number_Of_Elements(int);
 int Calculate_Number(int, int);
 
 int * Generate_Sequence(int);
+int The_Size(long);
 
 #endif /* PA01_H */

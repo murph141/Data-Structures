@@ -1,5 +1,5 @@
 GCC = gcc
-CFLAGS = -Wall -Werror -Wshadow -O3 -ggdb
+CFLAGS = -Wall -Werror -Wshadow -ggdb
 SOURCES = sorting.c sorting_main.c
 OBJS = $(SOURCES:.c=.o)
 HDRS = pa01.h
