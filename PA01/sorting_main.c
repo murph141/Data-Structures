@@ -85,5 +85,5 @@ int main(int argc, char * argv[])
  * 
  * Take care of comparisons and moves
  * Free? (Possibly)
- * Output results to file
+ * Clock time
  */
