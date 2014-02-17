@@ -29,7 +29,6 @@ int main(int argc, char * argv[])
 
   //clock_t initial_time, after_sequence;
 
-  //initial_time = clock();
   // NEED TO FREE AFTER THIS POINT
   int i = Print_Seq(sequence_file, Size);
   
@@ -59,6 +58,7 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+
   int returned = Save_File(output_file, values, Size);
 
   if (!returned)
@@ -76,6 +76,7 @@ int main(int argc, char * argv[])
   
   free(values);
 
+  //Screen_Dump(N_Comp, N_Move, IO_Time, Sorting_Time);
   return EXIT_SUCCESS;
 }
 
@@ -85,5 +86,6 @@ int main(int argc, char * argv[])
  * 
  * Take care of comparisons and moves
  * Free? (Possibly)
- * Clock time
+ * Clock time (With Screen_Dump fx)
+ *
  */

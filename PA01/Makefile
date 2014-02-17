@@ -6,7 +6,7 @@ HDRS = pa01.h
 EXECUTABLE = proj1
 VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose
 
-.PHONY: all clean
+.PHONY: all clean test
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -17,4 +17,7 @@ $(EXECUTABLE): $(OBJS) $(HDRS)
 	$(GCC) $(CFLAGS) -c $*.c
 
 clean:
-	rm -rf *.o $(EXECUTABLE)
+	rm -rf *.o *.txt $(EXECUTABLE)
+
+test: all
+	$(VALGRIND) ./$(EXECUTABLE) i input seq.txt output.txt

@@ -111,34 +111,6 @@ int The_Size(long num)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 int Print_Seq(char * filename, int size)
 {
   FILE * sptr = fopen(filename, "w");
@@ -247,9 +219,6 @@ int * Generate_Sequence(int size)
 
 void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Move)
 {
-  * N_Comp = 0.0;
-  * N_Move = 0.0;
-
   int * sequence = Generate_Sequence(size);
 
   int number = Number_Of_Elements(Highest_Power(size));
@@ -270,4 +239,16 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
 void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Move)
 {
+}
+
+
+
+
+
+void Screen_Dump(double * N_Comp, double * N_Move, clock_t IO_Time, clock_t Sorting_Time)
+{
+  printf("Number of comparisons: %le\n", (* N_Comp));
+  printf("Number of moves: %le\n", (* N_Move));
+  //printf("I/O time: %le\n", IO_Time);
+  //printf("Sorting time: %le\n", Sorting_Time);
 }

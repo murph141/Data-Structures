@@ -17,4 +17,5 @@ int Calculate_Number(int, int);
 int * Generate_Sequence(int);
 int The_Size(long);
 
+void Screen_Dump(double *, double *, clock_t, clock_t);
 #endif /* PA01_H */
