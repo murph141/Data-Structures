@@ -80,7 +80,7 @@ int Save_File(char * filename, long * array, int Size)
 
   for(; i < Size; i++)
   {
-    if(fprintf(optr, "%li\n", array[i]) == The_Size(array[i]))
+    if(fprintf(optr, "%li\n", array[i]) == (The_Size(array[i]) + 1))
     {
       returned++;
     }
@@ -88,7 +88,7 @@ int Save_File(char * filename, long * array, int Size)
 
   fclose(optr);
 
-  return Size;
+  return returned;
 }
 
 
