@@ -239,12 +239,13 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
 void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Move)
 {
+  //MAKE SURE TO FREE
 }
 
 
 
 
-
+//May need to change this functions input variables (clock_t may be incorrect)
 void Screen_Dump(double * N_Comp, double * N_Move, clock_t IO_Time, clock_t Sorting_Time)
 {
   printf("Number of comparisons: %le\n", (* N_Comp));

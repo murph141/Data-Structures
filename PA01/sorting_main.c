@@ -23,7 +23,7 @@ int main(int argc, char * argv[])
 
   if(values == NULL)
   {
-    printf("Error loading the file\n");
+    printf("Error loading the input file\n");
     return EXIT_FAILURE;
   }
 

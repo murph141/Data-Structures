@@ -6,7 +6,7 @@ HDRS = pa01.h
 EXECUTABLE = proj1
 VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose
 
-.PHONY: all clean test
+.PHONY: all clean test_insert test_select test
 
 all: $(SOURCES) $(EXECUTABLE)
 
@@ -19,5 +19,13 @@ $(EXECUTABLE): $(OBJS) $(HDRS)
 clean:
 	rm -rf *.o *.txt $(EXECUTABLE)
 
-test: all
+test_insert: all
 	$(VALGRIND) ./$(EXECUTABLE) i input seq.txt output.txt
+
+test_select: all
+	$(VALGRIND) ./$(EXECUTABLE) s input seq.txt output.txt
+
+test:
+	@echo
+	@echo "Use make test_insert or make test_select"
+	@echo
