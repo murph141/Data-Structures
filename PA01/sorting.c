@@ -236,6 +236,7 @@ int * Generate_Sequence(int size)
 
 
 
+// Uses shell sort with an inner insertion sort to sort a given array of longs
 void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Move)
 {
   int * sequence = Generate_Sequence(size);
@@ -275,6 +276,7 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
 
 
+// Uses shell sort with an inner selection sort to sort a given array of longs
 void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Move)
 {
   int * sequence = Generate_Sequence(size);
@@ -306,7 +308,7 @@ void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
 
 
-//May need to change this functions input variables (clock_t may be incorrect)
+// Displays all the required info to stdin
 void Screen_Dump(double N_Comp, double N_Move, double IO_Time, double Sorting_Time)
 {
   printf("Number of comparisons: %le\n", N_Comp);
@@ -317,6 +319,7 @@ void Screen_Dump(double N_Comp, double N_Move, double IO_Time, double Sorting_Ti
 
 
 
+// Swaps two long values
 void Swap(long * a, long * b)
 {
   long temp = * a;
