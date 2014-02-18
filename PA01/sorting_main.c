@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
   
   free(values);
 
-  //Screen_Dump(N_Comp, N_Move, IO_Time, Sorting_Time);
+  Screen_Dump(N_Comp, N_Move, 0.0, 0.0);
   return EXIT_SUCCESS;
 }
 

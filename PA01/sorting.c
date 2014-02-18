@@ -222,44 +222,31 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
   int number = Number_Of_Elements(Highest_Power(size));
 
-  int h, i, j;//, k, l;
+  int h, i, j, k;
 
   long temp;
 
-  /*
-  for(h = 0; h < number; h++)
-  {
-    l = sequence[h];
-    for(i = l; i < number; i++)
-    {
-      for(j = i; j < size; j++)
-      {
-        temp = array[j];
-
-        for(k = j; k >= i && array[k - i] > temp; k -= i)
-        {
-          array[k] = array[k - i];
-        }
-        array[k] = temp;
-      }
-    }
-  }
-  */
-
   for(h = number - 1; h >= 0; h--)
   {
-    for(i = h; i < size; i++)
+    k = sequence[h];
+    for(j = k; j < size; j++)
     {
-      temp = array[i];
+      temp = array[j];
 
-      for(j = i; j >= h && array[j - h] > temp; j -= h)
+      i = j;
+
+      while(i >= k && array[i - k] > temp)
       {
-        array[j] = array[j - h];
+        (* N_Comp) += 2;
+        array[i] = array[i - k];
+        i -= k;
+        ( * N_Move)
       }
 
-      array[j] = temp;
+      array[i] = temp;
     }
   }
+
 
   free(sequence);
 }
@@ -281,7 +268,13 @@ void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Mo
     for(i = h; i < size; i++)
     {
       //temp = array[i];
-      printf("%d\n", i);
+      //printf("%d %li\n", i, temp);
+      int test;
+
+      for(test = 0; test < i; test++)
+      {
+        printf("array[%d] = %li\n", test, array[test]);
+      }
     }
   }
 
@@ -296,8 +289,8 @@ void Screen_Dump(double N_Comp, double N_Move, double IO_Time, double Sorting_Ti
 {
   printf("Number of comparisons: %le\n", N_Comp);
   printf("Number of moves: %le\n", N_Move);
-  //printf("I/O time: %le\n", IO_Time);
-  //printf("Sorting time: %le\n", Sorting_Time);
+  printf("I/O time: %le\n", IO_Time);
+  printf("Sorting time: %le\n", Sorting_Time);
 }
 
 
@@ -306,4 +299,21 @@ void swap(long * a, long * b)
   long temp = * a;
   * a = * b;
   * b = temp;
+}
+
+
+long Find_Max(long * array, int size)
+{
+  int i = 0;
+  long min = array[0];
+
+  for(; i < size; i++)
+  {
+    if(array[i] < min)
+    {
+      min = array[i];
+    }
+  }
+
+  return min;
 }
