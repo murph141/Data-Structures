@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<string.h>
 #include "pa01.h"
 
 //Validates whether the number given in the input file specifies
@@ -140,7 +139,7 @@ int Print_Seq(char * filename, int size)
       fprintf(sptr, "%d\n", Calculate_Number(i -j, j));
     }
   }
-      
+
   fclose(sptr);
 
   return number;
@@ -211,7 +210,7 @@ int * Generate_Sequence(int size)
       sequence[count++] = Calculate_Number(i -j, j);
     }
   }
-      
+
   return sequence;
 }
 
@@ -223,12 +222,43 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
   int number = Number_Of_Elements(Highest_Power(size));
 
-  int i, temp;
+  int h, i, j;//, k, l;
 
-  for(i = number - 1; i >= 0; i--)
+  long temp;
+
+  /*
+  for(h = 0; h < number; h++)
   {
-    temp = sequence[i];
-    printf("%d\n", temp);
+    l = sequence[h];
+    for(i = l; i < number; i++)
+    {
+      for(j = i; j < size; j++)
+      {
+        temp = array[j];
+
+        for(k = j; k >= i && array[k - i] > temp; k -= i)
+        {
+          array[k] = array[k - i];
+        }
+        array[k] = temp;
+      }
+    }
+  }
+  */
+
+  for(h = number - 1; h >= 0; h--)
+  {
+    for(i = h; i < size; i++)
+    {
+      temp = array[i];
+
+      for(j = i; j >= h && array[j - h] > temp; j -= h)
+      {
+        array[j] = array[j - h];
+      }
+
+      array[j] = temp;
+    }
   }
 
   free(sequence);
@@ -239,17 +269,41 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
 
 void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Move)
 {
-  //MAKE SURE TO FREE
+  int * sequence = Generate_Sequence(size);
+
+  int number = Number_Of_Elements(Highest_Power(size));
+  
+  int h, i;
+  //long temp;
+
+  for(h = number - 1; h>= 0; h--)
+  {
+    for(i = h; i < size; i++)
+    {
+      //temp = array[i];
+      printf("%d\n", i);
+    }
+  }
+
+  free(sequence);
 }
 
 
 
 
 //May need to change this functions input variables (clock_t may be incorrect)
-void Screen_Dump(double * N_Comp, double * N_Move, clock_t IO_Time, clock_t Sorting_Time)
+void Screen_Dump(double N_Comp, double N_Move, double IO_Time, double Sorting_Time)
 {
-  printf("Number of comparisons: %le\n", (* N_Comp));
-  printf("Number of moves: %le\n", (* N_Move));
+  printf("Number of comparisons: %le\n", N_Comp);
+  printf("Number of moves: %le\n", N_Move);
   //printf("I/O time: %le\n", IO_Time);
   //printf("Sorting time: %le\n", Sorting_Time);
+}
+
+
+void swap(long * a, long * b)
+{
+  long temp = * a;
+  * a = * b;
+  * b = temp;
 }
