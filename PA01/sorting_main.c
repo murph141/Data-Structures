@@ -101,13 +101,3 @@ int main(int argc, char * argv[])
   // SUCCESS!!!
   return EXIT_SUCCESS;
 }
-
-/*
- *
- * TO DO:
- * 
- * Take care of comparisons and moves
- * Free? (Possibly)
- * Clock time (With Screen_Dump fx)
- *
- */
