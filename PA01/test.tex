@@ -1,22 +1,70 @@
 \documentclass{article}
 
-\usepackage[margin=1.0in]{geometry}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amsmath}
+
+\addtolength{\topmargin}{-.875in}
 
 \begin{document}
 
-%\title{ECE368 Programming Assignment 1}
-%\author{Eric Murphy}
+\author{Eric Murphy\vspace{-2ex}}
+\title{ECE Programming Assignment 1}
 
-%\maketitle
+\maketitle
 
-\indent
-\newline
-TESTEASTEA
-aSDFASDFASD
-%This program takes a sorting method, an input file, a sequence file, and an output file.  This program takes the given input, validates the input, and then sorts the input given the user's specifications.  The program uses a shell sort with an inner insertion or selection sort depending on the specified input.  Using these methods, the user is able to 
+\section*{Time and Space Complexity}
 
-\begin{equation}
-  \Omega (n) = 4n^2 + 2n + 5
-\end{equation}
+\indent The time and space complexities for my program are given as follows:
 
+\begin{equation*}
+  T_{time}(n) \in \Omega (n^2) \qquad \qquad
+  T_{space}(n) \in \Omega (n^2)
+\end{equation*}
+
+\subsection*{Space Complexity}
+
+The space complexity of my program is n\^{}2 because the number of rows in the pyramid created for the sequence is n, the size of the data set, divided by three.
+From this, one can obtain the total number of elements in by using the equation:
+
+\begin{equation*}
+  \# \; of \; items = \frac{n(n+1)}{2}, \; where \; n \; = \; the \; data \; set \; divided \; by \; 3
+\end{equation*}
+
+\noindent From this, one can obtain that the space complexity.  The size of the data set divided by three is also equal to the number of rows that will be in the complete pyramid.
+
+\subsection*{Time Complexity}
+
+Similar to the space complexity, the time complexity of my program is n\^{}2.  My time complexity of my program is as such because the number of elements in my sequence (n\^{}2) are iterated over.
+Just as my sequence took up n\^{}2 spaces, my time complexity is the same because n\^{}2 elements are placed in to my malloc'ed array.
+
+\subsection*{Run-Time Analysis}
+
+Running my code on a data set of 10000000 elements, I obtain a run-time analysis of: \newline \newline
+\indent Number of comparisons: 2.541659e+07 \newline
+\indent Number of moves: 1.899581e+08 \newline
+\indent I/O time: 1.000000e+00 \newline
+\indent Sorting time: 8.412430e+05 \newline
+
+\noindent Running my code on a data set of 1000000 elements, I obtain a run-time analysis of: \newline \newline
+\indent Number of comparisons: 1.944636e+06 \newline
+\indent Number of moves: 1.364907e+07 \newline
+\indent I/O time: 0.000000e+00 \newline
+\indent Sorting time: 5.848500e+04 \newline
+
+\noindent As one would notice, the number of comparisions and moves are each increased by around a factor of 10.
+Knowing this, I can deduce that my time complexity of n\^{}2 is correct.
+
+\subsection*{Additional Space Complexity}
+
+The space complexity of the rest of my program is:
+
+\begin{equation*}
+  T_{loading} \in \Omega (n)
+\end{equation*}
+
+\noindent The reason for the space complexity of the rest of my program being n is that the data set size is loaded from the input file and stored in an array.  each item from the input file, aside from the first item which specifies the data set size, is stored.
+\subsection*{Thoughts on Selection Sort Slowness}
+
+Selection sort works so inefficiently with shell sort is because in selection sort, each element is checked to determine which element in the array is the largest.  Since each element has to be checked, it can require a large amount of time when parsing large data sets.
+Selections sort needs to be optimized in order to allow for large quantities of data to be used in a shell sort with an inner selection sort.
 \end{document}
