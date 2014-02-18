@@ -18,8 +18,11 @@ int main(int argc, char * argv[])
 
   int Size;
   long * values;
+  clock_t t_sort, t_load, t_save, t_seq;
 
+  t_load = clock();
   values = Load_File(input_file, &Size);
+  t_load = clock() - t_load;
 
   if(values == NULL)
   {
@@ -27,10 +30,11 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  //clock_t initial_time, after_sequence;
 
   // NEED TO FREE AFTER THIS POINT
+  t_seq = clock();
   int i = Print_Seq(sequence_file, Size);
+  t_seq = clock() - t_seq;
   
   if(i == 0)
   {
@@ -43,6 +47,8 @@ int main(int argc, char * argv[])
   double N_Comp = 0.0, N_Move = 0.0;
 
   // Check for the sorting method chosen by the user
+
+  t_sort = clock();
   if(method == 'i')
   {
     Shell_Insertion_Sort(values, Size, &N_Comp, &N_Move);
@@ -57,9 +63,11 @@ int main(int argc, char * argv[])
     free(values);
     return EXIT_FAILURE;
   }
+  t_sort = clock() - t_sort;
 
-
+  t_save = clock();
   int returned = Save_File(output_file, values, Size);
+  t_save = clock() - t_save;
 
   if (!returned)
   {
@@ -76,7 +84,7 @@ int main(int argc, char * argv[])
   
   free(values);
 
-  Screen_Dump(N_Comp, N_Move, 0.0, 0.0);
+  Screen_Dump(N_Comp, N_Move, (t_save + t_load + t_seq) / CLOCKS_PER_SEC, t_sort);
   return EXIT_SUCCESS;
 }
 

@@ -18,7 +18,6 @@ int * Generate_Sequence(int);
 int The_Size(long);
 
 void Screen_Dump(double, double, double, double);
-void swap(long *, long *);
+void Swap(long *, long *);
 
-long Find_Max(long *, int);
 #endif /* PA01_H */

@@ -2,8 +2,7 @@
 #include<stdlib.h>
 #include "pa01.h"
 
-//Validates whether the number given in the input file specifies
-//the actual number of input arguments
+//Validates whether the number given in the input file specifies the actual number of input arguments
 int Validate_Numbers(FILE * iptr)
 {
   int num;
@@ -22,6 +21,11 @@ int Validate_Numbers(FILE * iptr)
 
 
 
+// Loads the specified file
+// Checks to make sure:
+//      The load was successful
+//      The number of items equals the number that was specified
+//      Fscanf worked correctly
 
 long * Load_File(char * filename, int * Size)
 {
@@ -62,7 +66,10 @@ long * Load_File(char * filename, int * Size)
 
 
 
-
+// Saves the sorted sequence to a file (Specified by the user)
+// Checks to make sure:
+//      The file was opened successfully
+//      Fprintf was successfull
 
 int Save_File(char * filename, long * array, int Size)
 {
@@ -92,8 +99,16 @@ int Save_File(char * filename, long * array, int Size)
 
 
 
+// Get the size of the element give plus one
+// Used in conjunction with fprintf to validate input
 int The_Size(long num)
 {
+  // If the number equals 0, do this to avoid errors
+  if(!num)
+  {
+    return 1;
+  }
+
   int i = 0;
 
   while(num > 0)
@@ -107,8 +122,9 @@ int The_Size(long num)
 
 
 
-
-
+// Prints the pyramid sequence to a given file
+// Checks to make sure:
+//        The file was opened successfully
 
 int Print_Seq(char * filename, int size)
 {
@@ -147,6 +163,7 @@ int Print_Seq(char * filename, int size)
 
 
 
+// Computes the highest power of three that is less than or equal to the size of the array
 int Highest_Power(int size)
 {
   int n = 0;
@@ -161,6 +178,7 @@ int Highest_Power(int size)
 
 
 
+// Returns the number of elements that will be in the pyramid used for sorting
 int Number_Of_Elements(int n)
 {
   return ((n + 1) * (n + 2) / 2);
@@ -168,6 +186,7 @@ int Number_Of_Elements(int n)
 
 
 
+// Calculates the number in the pyramid given a row and column
 int Calculate_Number(int i, int j)
 {
   int number = 1;
@@ -188,6 +207,7 @@ int Calculate_Number(int i, int j)
 
 
 
+// Generates the sequence of the pyramid
 int * Generate_Sequence(int size)
 {
   int n = Highest_Power(size);
@@ -229,28 +249,29 @@ void Shell_Insertion_Sort(long * array, int size, double * N_Comp, double * N_Mo
   for(h = number - 1; h >= 0; h--)
   {
     k = sequence[h];
+
     for(j = k; j < size; j++)
     {
       temp = array[j];
+      (* N_Move)++;
 
       i = j;
 
       while(i >= k && array[i - k] > temp)
       {
-        (* N_Comp) += 2;
         array[i] = array[i - k];
         i -= k;
-        ( * N_Move)
+        (* N_Comp) += 2;
+        (* N_Move)++;
       }
 
       array[i] = temp;
+      (* N_Move)++;
     }
   }
 
-
   free(sequence);
 }
-
 
 
 
@@ -259,28 +280,29 @@ void Shell_Selection_Sort(long * array, int size, double * N_Comp, double * N_Mo
   int * sequence = Generate_Sequence(size);
 
   int number = Number_Of_Elements(Highest_Power(size));
-  
-  int h, i;
-  //long temp;
 
-  for(h = number - 1; h>= 0; h--)
+  int h, i, j, k;
+
+  for(h = number - 1; h >=0; h--)
   {
-    for(i = h; i < size; i++)
-    {
-      //temp = array[i];
-      //printf("%d %li\n", i, temp);
-      int test;
+    k = sequence[h];
 
-      for(test = 0; test < i; test++)
+    for(j = 0; j < size - 1; j++)
+    {
+      for(i = j + k; i < size; i += k)
       {
-        printf("array[%d] = %li\n", test, array[test]);
+        if(array[i] < array[j])
+        {
+          Swap(&array[i], &array[j]);
+          (* N_Comp)++;
+          (* N_Move) += 3;
+        }
       }
     }
   }
 
   free(sequence);
 }
-
 
 
 
@@ -294,26 +316,10 @@ void Screen_Dump(double N_Comp, double N_Move, double IO_Time, double Sorting_Ti
 }
 
 
-void swap(long * a, long * b)
+
+void Swap(long * a, long * b)
 {
   long temp = * a;
   * a = * b;
   * b = temp;
-}
-
-
-long Find_Max(long * array, int size)
-{
-  int i = 0;
-  long min = array[0];
-
-  for(; i < size; i++)
-  {
-    if(array[i] < min)
-    {
-      min = array[i];
-    }
-  }
-
-  return min;
 }
