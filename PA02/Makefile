@@ -17,7 +17,7 @@ $(EXECUTABLE): $(OBJS) $(HDRS)
 	$(GCC) $(CFLAGS) -c $*.c
 
 clean:
-	rm -rf *.o *.txt $(EXECUTABLE)
+	rm -rf *.o $(EXECUTABLE)
 
 # Fix these tests
 #
