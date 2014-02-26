@@ -21,18 +21,8 @@ int Save_File(char *, Node *);
 // Used for sorting the data
 Node * Shell_Sort(Node *);
 
-// May not need these functions
-
-/*
-int Validate_Numbers(FILE *);
-int Print_Seq(char *, int);
-int The_Size(long);
-int * Generate_Sequence(int);
-int Highest_Power(int);
-int Number_Of_Elements(int);
-int Calculate_Number(int, int);
-void Screen_Dump(double, double, double, double);
-void Swap(long *, long *);
-*/
+//Create the structure of values
+Node * Create_Struct(FILE *, int);
+void Print_Struct(Node *);
 
 #endif /* PA02_H */
