@@ -22,7 +22,8 @@ int Save_File(char *, Node *);
 Node * Shell_Sort(Node *);
 
 //Create the structure of values
-Node * Create_Struct(FILE *, int);
+Node * Create_Node(long);
 void Print_Struct(Node *);
+void Destroy_Struct(Node *);
 
 #endif /* PA02_H */

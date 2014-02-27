@@ -16,7 +16,13 @@ int main(int argc, char * argv[])
 
   Node * values = Load_File(input_file);
 
-  free(values);
+  if(!values)
+  {
+    printf("Error in Load_File function\n");
+    return EXIT_FAILURE;
+  }
+
+  Destroy_Struct(values);
 
   return EXIT_SUCCESS;
 }

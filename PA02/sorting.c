@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include "pa02.h"
 
+// Loads the input file into a structure
 Node * Load_File(char * input_file)
 {
   FILE * iptr = fopen(input_file, "r");
@@ -22,43 +23,49 @@ Node * Load_File(char * input_file)
 
   fseek(iptr, 0, SEEK_SET);
 
-  Node * values;
 
-  values = Create_Struct(iptr, numbers);
+  Node * dummy = malloc(sizeof(Node));
+  dummy -> value = numbers;
+  dummy -> next = NULL;
 
-  Print_Struct(values);
-
-  fclose(iptr);
-
-  return NULL;
-}
-
-// Create a structure of the values that are in the input file
-Node * Create_Struct(FILE * iptr, int numbers)
-{
-  Node * values = NULL;
-  Node * root = values;
+  Node * root = dummy;
 
   while(numbers--)
   {
-    values = malloc(sizeof(Node));
-    
-    if(values == NULL)
+    if(!fscanf(iptr, "%li", &temp))
     {
-      printf("Memory allocation failed\n");
+      printf("Error scanning in the input values\n");
       return NULL;
     }
 
-    fscanf(iptr, "%li", &(values -> value));
-
-    values -> next = NULL;
-    values = values -> next;
+    dummy -> next = Create_Node(temp);
+    dummy = dummy -> next;
   }
+
+  dummy -> next = NULL;
+
+  //Print_Struct(root);
+
+  fclose(iptr);
 
   return root;
 }
 
 
+
+Node * Create_Node(long value)
+{
+  Node * values = malloc(sizeof(Node));
+
+  values -> value = value;
+
+  values -> next = NULL;
+
+  return values;
+}
+
+
+// Prints a linked list
 void Print_Struct(Node * values)
 {
   if(values == NULL)
@@ -66,7 +73,18 @@ void Print_Struct(Node * values)
     return;
   }
 
-  Print_Struct(values -> next);
   printf("%li\n", values -> value);
+  Print_Struct(values -> next);
 }
 
+// Destroys a linked list
+void Destroy_Struct(Node * a)
+{
+  if(!a)
+  {
+    return;
+  }
+
+  Destroy_Struct(a -> next);
+  free(a);
+}
