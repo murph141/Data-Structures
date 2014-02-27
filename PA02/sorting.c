@@ -37,8 +37,7 @@ Node * Load_File(char * input_file)
 Node * Create_Struct(FILE * iptr, int numbers)
 {
   Node * values = NULL;
-
-  int i =0;
+  Node * root = values;
 
   while(numbers--)
   {
@@ -50,13 +49,13 @@ Node * Create_Struct(FILE * iptr, int numbers)
       return NULL;
     }
 
-    fscanf(iptr, "%li", values -> value);
+    fscanf(iptr, "%li", &(values -> value));
 
     values -> next = NULL;
     values = values -> next;
   }
 
-  return values;
+  return root;
 }
 
 
@@ -68,6 +67,6 @@ void Print_Struct(Node * values)
   }
 
   Print_Struct(values -> next);
-  printf("%li\n", values -> values);
+  printf("%li\n", values -> value);
 }
 

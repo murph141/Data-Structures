@@ -12,9 +12,11 @@ int main(int argc, char * argv[])
   }
   
   char * input_file = argv[1];
-  char * output_file = argv[2];
+  //char * output_file = argv[2];
 
   Node * values = Load_File(input_file);
+
+  free(values);
 
   return EXIT_SUCCESS;
 }
