@@ -12,7 +12,7 @@ int main(int argc, char * argv[])
   }
   
   char * input_file = argv[1];
-  //char * output_file = argv[2];
+  char * output_file = argv[2];
 
   Node * values = Load_File(input_file);
 
@@ -20,6 +20,13 @@ int main(int argc, char * argv[])
   {
     printf("Error in Load_File function\n");
     return EXIT_FAILURE;
+  }
+
+  int successful = Save_File(output_file, values);
+
+  if(successful != values -> value)
+  {
+    printf("ERROR\n");
   }
 
   Destroy_Struct(values);

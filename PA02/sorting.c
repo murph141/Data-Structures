@@ -52,6 +52,28 @@ Node * Load_File(char * input_file)
 }
 
 
+// Saves a linked list of values to a file
+int Save_File(char * output_file, Node * root)
+{
+  FILE * optr = fopen(output_file, "w");
+  int successful = 0;
+  long number = root -> value; // Use the number stored in the dummy 
+
+  root = root -> next; // Bypass the dummy
+
+  while(number--)
+  {
+    if(fprintf(optr, "%li\n", root -> value) > 0)
+    {
+      successful++;
+    }
+    root = root -> next;
+  }
+
+  fclose(optr);
+
+  return successful; 
+}
 
 Node * Create_Node(long value)
 {
