@@ -18,15 +18,18 @@ int main(int argc, char * argv[])
 
   if(!values)
   {
-    printf("Error in Load_File function\n");
+    printf("Error: File loaded unsuccessfully\n");
     return EXIT_FAILURE;
   }
+
+  values = Shell_Sort(values);
 
   int successful = Save_File(output_file, values);
 
   if(successful != values -> value)
   {
-    printf("ERROR\n");
+    printf("Error: Values in output file and input file differ\n");
+    return EXIT_FAILURE;
   }
 
   Destroy_Struct(values);
