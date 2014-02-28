@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 
-\usepackage[margin=0.75in]{geometry}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amsmath}
 
 \begin{document}
 
@@ -11,6 +12,26 @@
   2/28/14
 \end{flushright}
 
-\subsection*{Time Complexity:}
-The time complexity of my program in $ O(n) $.
+\subsection*{I/O and Sorting Times:}
+Below are the I/O and sorting times for inputs of 1000 and 10000 numbers.
+\newline
+
+\noindent $n = 1000$ \hfill $n = 10000$ \\
+I/O time: 0.000000e+00 \hfill I/O time: 0.000000e+00 \\
+Sorting time: 1.000000e+00 \hfill Sorting time: 1.890000e+02 \\
+
+\noindent As you may notice, the sorting time changes drastically when increasing $n$ but the I/O time stays relatively the same. As the size of the problem increases, the sorting time grows at a rate of $ O(n^2)$. The sorting time grows at a rate approximately equal to $T(n) = 2n^2$. When $n = 5000$ was tried on my program, the sorting time took 37 seconds, which is a little less than $T(n) = 2n^2$; similar to $n = 5000 \mbox{ and } 10000$; therefore one can obtain that $T(n) \in O(n^2)$. Time complexity can be improved by implementing a list of points to nodes that contain linked lists to the values that are being sorted. Each of these sub-nodes are then sorted using insertion sort and merged back together; similar to methods used in class.
+
+\subsection*{Space Complexity:}
+The space complexity for my program is $O((log(n))^2)$. Disregarding the linked list of input values, the only space that is used in my program is the space for the sequence. The sequence is $\lfloor log_3(n) \rfloor$ units tall. To determine the amount of items in the sequence, one can use:
+
+\begin{align*}
+  \mbox{\# of items} = \frac{(\mbox{height} + 1) * (\mbox{height} + 2)}{2} \\
+\end{align*}
+
+\noindent Height is 0 based in my implementation, therefore the number of elements in the sequence is determined as such. Using this above equation, and disregarding the space for the linked list, one can obtan the space complexity to be $O((log(n))^2)$. $O(1)$ space complexity can be achieved in the program by determining the values of the sequence on the fly; a relatively easy task that would involve many function calls however.
+
+\subsection*{Comparison to Project 1:}
+As compared to Project 1, the sorting and I/O times for Project 2 are, understandably, slower. Since we ussed arrays in Project 1 compared to a linked list in Project 2, one would expect slower results. For the I/O time, Project 2 ran a little slower but it was hardly noticeable. The I/O times were comparable. The I/O times were comparable because the linked list was generate in reverse order to how it was scanned in, making the linked list generation very efficient. One the flip side, the sorting times between Projects 1 and 2 were vastly different. Whereas 10000 numbers were easily sorted in Project 1, these numbers took a \emph{very} long time to sort in Project 2 comparatively. The reason for this significant difference in sorting time is the linked list.  In Project 1 I was able to point to an index in an array to swap values between them. In Project 2 however, I had to iterate through a linked list in order to get to the value that I wanted. If the value was towards the end of the linked list, my program would have to iterate through a large amount of nodes. This key difference was what made the program so much faster in Project 1.
+
 \end{document}

@@ -34,6 +34,9 @@ int Number_Of_Elements(int);
 int Highest_Power(int);
 int Calculate_Number(int, int);
 
+// Traverses a linked list a given number of times
 Node * Traverse(Node *, int);
+
+// Dumps I/O and Sorting time info to stdout
 void Screen_Dump(double, double);
 #endif /* PA02_H */

@@ -3,12 +3,12 @@
 #include "pa02.h"
 
 
-
 // Loads the input file into a structure
 Node * Load_File(char * input_file)
 {
   FILE * iptr = fopen(input_file, "r");
 
+  // Check for file opening errors
   if(iptr == NULL)
   {
     printf("Error opening input file\n");
@@ -16,32 +16,35 @@ Node * Load_File(char * input_file)
   }
 
   int numbers = 0;
-  long temp;
+  long temp; // Temp variable used to count the number of items in the input file
 
   while(fscanf(iptr, "%li", &temp) == 1)
   {
     numbers++;
   }
 
+  // Set the file to the beginning
   fseek(iptr, 0, SEEK_SET);
-
 
   Node * dummy = malloc(sizeof(Node));
 
+  // Check for memory allocation errors
   if(dummy == NULL)
   {
     printf("Memory allocation failed\n");
     return NULL;
   }
 
+  // Create a dummy node that contains the number of items in the linked list that follows (Very useful, thanks for the idea Professor Koh)
   dummy -> value = numbers;
   dummy -> next = NULL;
 
   Node * root = NULL, * prev = NULL;
-  // Node * root = dummy;
 
+  // Create a linked list in reverse order (More efficient)
   while(numbers--)
   {
+    // Make sure the item in scanned
     if(!fscanf(iptr, "%li", &temp))
     {
       printf("Error scanning in the input values\n");
@@ -60,43 +63,31 @@ Node * Load_File(char * input_file)
     }
 
     prev = root;
-
-    /*
-       dummy -> next = Create_Node(temp);
-
-       if(dummy -> next == NULL)
-       {
-       printf("Memory allocation failed\n");
-       return NULL;
-       }
-
-       dummy = dummy -> next;
-       */
   }
 
+  // Place the dummy node at the front of the linked lists
   dummy -> next = root;
 
-  //Print_Struct(dummy);
-
+  // Close the file
   fclose(iptr);
 
+  // Return the linked list with the dummy node at the front
   return dummy;
 }
-
-
 
 // Saves a linked list of values to a file
 int Save_File(char * output_file, Node * root)
 {
   FILE * optr = fopen(output_file, "w");
 
+  // Check for file I/O errors
   if(optr == NULL)
   {
     printf("File opened unsuccesfully\n");
     return -1; //Since the size cannot be less than 0, the program will exit on error-checking in main
   }
 
-  int successful = 0;
+  int successful = 0; // The number of successful file writes
   long number = root -> value; // Use the number stored in the dummy 
 
   root = root -> next; // Bypass the dummy
@@ -110,92 +101,82 @@ int Save_File(char * output_file, Node * root)
     root = root -> next;
   }
 
+  // Close the file
   fclose(optr);
 
-  return successful; 
+  return successful; // No need to check successful against the actual number here, it is done it main
 }
 
-
+// Does the bulk of the sorting of the linked list
 Node * Shell_Sort(Node * root)
 {
+  // Create an array of the gaps
   int * gaps = Generate_Sequence(root -> value);
 
+  // Something went wrong!
   if(gaps == NULL)
   {
     return NULL;
   }
 
-  int i, j, k, h;
+  // The following code is extrememly similar to the code I used for PA01
 
+
+  // inner - the inner loop counter
+  // outer - the outer loop counter
+  // gap - stores the value of the current gap (Descending order)
+  // gap_ind - used to track the index of the array the holds the gap values
+  int inner, outer, gap, gap_ind;
+
+  // Stores a temporary linked list value
   long temp;
 
-  /*
-     for(i = 0; i < Number_Of_Elements(Highest_Power(root -> value)); i++)
-     {
-     printf("gaps[%d] = %d\n", i, gaps[i]);
-     }
-     */
+  int number = root -> value; // number is equal to the size of the linked list
+  int size = Number_Of_Elements(Highest_Power(number)); // size is the size of the sequence
 
-  int number = root -> value;
-  int size = Number_Of_Elements(Highest_Power(number));
+  Node * data = root -> next; // Bypass the dummy header (It dosen't need to be sorted)
 
-  Node * data = root -> next;
-
-  //Print_Struct(data);
-
-  //printf("\n\n");
-
-  for(h = 0; h < size; h++)
+  // Iterate through the gaps
+  for(gap_ind = 0; gap_ind < size; gap_ind++)
   {
-    k = gaps[h];
+    //The current gap
+    gap = gaps[gap_ind];
 
-    for(j = k; j < number; j++)
+    //Outer loop, iterate through the numbers starting at gap
+    for(outer = gap; outer < number; outer++)
     {
-      temp = Traverse(data, j) -> value;
+      //Temp is equal to the value of the value of the loop counter
+      temp = Traverse(data, outer) -> value;
 
-      //  printf("%li %d\n", temp, j);
+      // Set the inner loop variable equal to the outer loop variable
+      inner = outer;
 
-      i = j;
-
-      while(i >= k && (Traverse(data, i - k) -> value > temp))
+      // While inner is still larger than gap AND the value at inner loop counter - gap is greater than the temporary linked list value
+      while(inner >= gap && (Traverse(data, inner - gap) -> value > temp))
       {
-        Traverse(data, i) -> value = Traverse(data, i - k) -> value;
+        // The value are location inner in the linked list is equal to the value at inner - gap
+        Traverse(data, inner) -> value = Traverse(data, inner - gap) -> value;
 
-        i -= k;
+        // Decrement inner by the gap value
+        inner -= gap;
       }
 
-      Traverse(data, i) -> value = temp;
-
+      // The value at position inner in the linked list is equal to the temporary value
+      Traverse(data, inner) -> value = temp;
     }
   }
 
-  /*
-     for(i = 0; i < size; i++)
-     {
-     int temp = gaps[i];
-
-     List * data = malloc(sizeof(List) * temp);
-
-     List * head = data;
-
-     for(j = 0; j < temp; j++)
-     {
-     for(k = j; k < size; k += temp)
-     {
-     List -> node = malloc(sizeof(Node));
-     List -> node -> value = 
-
-     }
-     */
-
+  // Free the sequence
   free(gaps);
 
+  // Return root, dummy is part of this structure, the next node of root and on were sorted, but not root
   return root;
 }
 
-
+// Used to traverse a linked list given its root and the number of times to traverse it
 Node * Traverse(Node * root, int i)
 {
+  // Store the location of the root
   Node * first = root;
 
   while(first != NULL && i--)
@@ -206,32 +187,29 @@ Node * Traverse(Node * root, int i)
   return first;
 }
 
-
+// Generates the pyramid sequence
 int * Generate_Sequence(int size)
 {
+  // The number of columns in the pyramid (0 is the intial index)
   int n = Highest_Power(size);
+
+  // The number of elements in the sequence
   int num = Number_Of_Elements(n);
 
+  // Allocate space for the sequence
   int * array = malloc(sizeof(int) * num);
 
+  // Check for memory errors
   if(array == NULL)
   {
     printf("Memory allocation failed\n");
     return NULL;
   }
 
+  // Counter variables
   int i, j, count = 0;
 
-  /*
-     for(i = 0; i <= n; i++)
-     {
-     for(j = 0; j <= i; j++)
-     {
-     array[count++] = Calculate_Number(i - j, j);
-     }
-     }
-     */
-
+  // Fill the sequence, as verbatim to the code for PA01
   for(i = n; i >= 0; i--)
   {
     for(j = i; j >= 0; j--)
@@ -240,28 +218,31 @@ int * Generate_Sequence(int size)
     }
   }
 
+  // Return the sequence
   return array;
 }
 
-
+// Create a linked list node
 Node * Create_Node(long value)
 {
+  // Allocate space
   Node * values = malloc(sizeof(Node));
 
+  // Check for allocation errors
   if(values == NULL)
   {
     printf("Memory allocation failed\n");
     return NULL;
   }
 
+  // Input the value (Very confusing line, lots of value(s))
   values -> value = value;
 
   values -> next = NULL;
 
+  // Return the link
   return values;
 }
-
-
 
 // Prints a linked list
 void Print_Struct(Node * values)
@@ -271,30 +252,32 @@ void Print_Struct(Node * values)
     return;
   }
 
+  // Print, then move on
   printf("%li\n", values -> value);
   Print_Struct(values -> next);
 }
 
-
-
 // Destroys a linked list
 void Destroy_Struct(Node * a)
 {
+  // Check for null
   if(a == NULL)
   {
     return;
   }
 
+  // Call next
   Destroy_Struct(a -> next);
   free(a);
 }
 
-
+// Determines the number of elements in the sequence, same as PA01
 int Number_Of_Elements(int n)
 {
   return ((n + 1) * (n + 2) / 2);
 }
 
+// Returns the highest power in the sequence, same as PA01
 int Highest_Power(int size)
 {
   int n = 0;
@@ -308,7 +291,7 @@ int Highest_Power(int size)
   return (n - 1);
 }
 
-
+// Calculates the number in the sequence given a row and column, same as PA01
 int Calculate_Number(int i, int j)
 {
   int number = 1;
@@ -326,8 +309,7 @@ int Calculate_Number(int i, int j)
   return number;
 }
 
-
-
+// Prints the I/O and sorting times to the stdout
 void Screen_Dump(double io, double sort)
 {
   printf("I/O time: %le\n", io);
