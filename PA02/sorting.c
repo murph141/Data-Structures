@@ -104,7 +104,7 @@ Node * Shell_Sort(Node * root)
 {
   int * gaps = Generate_Sequence(root -> value);
 
-  int i;// j;
+  int i, j, k, l, temp;
 
   /*
   for(i = 0; i < Number_Of_Elements(Highest_Power(root -> value)); i++)
@@ -114,20 +114,67 @@ Node * Shell_Sort(Node * root)
   */
 
   int number = root -> value;
+  int size = Number_Of_Elements(Highest_Power(number));
 
-  //Node * data = root -> next;
+  Node * data = root -> next;
 
-  for(i = 0; i < Number_Of_Elements(Highest_Power(number)); i++)
+  for(i = 0; i < size; i++)
+  {
+    temp = gaps[i];
+
+    for(j = temp; j < size; j++)
+    {
+      k = Traverse(data, j) -> value;
+
+      l = j;
+
+      while(l >= temp && (Traverse(data, l - temp) -> value > k))
+      {
+        Traverse(data, l) -> value = Traverse(data, l - temp) -> value;
+
+        l -= temp;
+      }
+
+      Traverse(data, l) -> value = k;
+    }
+  }
+
+  /*
+  for(i = 0; i < size; i++)
   {
     int temp = gaps[i];
 
-    //for(j = temp; j < number; j++)
-    //{
+    List * data = malloc(sizeof(List) * temp);
 
-    //printf("%d\n", temp);
+    List * head = data;
+
+    for(j = 0; j < temp; j++)
+    {
+      for(k = j; k < size; k += temp)
+      {
+        List -> node = malloc(sizeof(Node));
+        List -> node -> value = 
+
   }
+  */
 
   free(gaps);
+
+  return root;
+}
+
+
+Node * Traverse(Node * root, int i)
+{
+  if(root == NULL)
+  {
+    return NULL;
+  }
+
+  while(i--)
+  {
+    root = root -> next;
+  }
 
   return root;
 }

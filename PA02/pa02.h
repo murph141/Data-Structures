@@ -35,4 +35,5 @@ int Highest_Power(int);
 int Calculate_Number(int, int);
 
 
+Node * Traverse(Node *, int);
 #endif /* PA02_H */
