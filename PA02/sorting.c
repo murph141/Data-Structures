@@ -104,7 +104,7 @@ Node * Shell_Sort(Node * root)
 {
   int * gaps = Generate_Sequence(root -> value);
 
-  int i, j, k, l, temp;
+  int i, j, k, h, temp;
 
   /*
   for(i = 0; i < Number_Of_Elements(Highest_Power(root -> value)); i++)
@@ -118,24 +118,24 @@ Node * Shell_Sort(Node * root)
 
   Node * data = root -> next;
 
-  for(i = 0; i < size; i++)
+  for(h = 0; h < size; h++)
   {
-    temp = gaps[i];
+    k = gaps[h];
 
-    for(j = temp; j < size; j++)
+    for(j = k; j < size; j++)
     {
-      k = Traverse(data, j) -> value;
+      temp = Traverse(data, j) -> value;
 
-      l = j;
+      i = j;
 
-      while(l >= temp && (Traverse(data, l - temp) -> value > k))
+      while(i >= k && (Traverse(data, i - k) -> value > temp))
       {
-        Traverse(data, l) -> value = Traverse(data, l - temp) -> value;
+        Traverse(data, i) -> value = Traverse(data, i - k) -> value;
 
-        l -= temp;
+        i -= k;
       }
 
-      Traverse(data, l) -> value = k;
+      Traverse(data, i) -> value = temp;
     }
   }
 
@@ -166,17 +166,13 @@ Node * Shell_Sort(Node * root)
 
 Node * Traverse(Node * root, int i)
 {
-  if(root == NULL)
+  Node * first = root;
+  while(first != NULL && i--)
   {
-    return NULL;
+    first = first -> next;
   }
 
-  while(i--)
-  {
-    root = root -> next;
-  }
-
-  return root;
+  return first;
 }
 
 
