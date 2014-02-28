@@ -104,6 +104,11 @@ Node * Shell_Sort(Node * root)
 {
   int * gaps = Generate_Sequence(root -> value);
 
+  if(gaps == NULL)
+  {
+    return NULL;
+  }
+
   int i, j, k, h;
 
   long temp;
@@ -128,15 +133,6 @@ Node * Shell_Sort(Node * root)
   {
     k = gaps[h];
 
-   // printf("k: %d\n", k);
-
-    /*
-    for(j = 0; j < number; j += k)
-    {
-      printf("%d\n", j);
-    }
-  }
-  */
     for(j = k; j < number; j++)
     {
       temp = Traverse(data, j) -> value;
@@ -185,6 +181,7 @@ Node * Shell_Sort(Node * root)
 Node * Traverse(Node * root, int i)
 {
   Node * first = root;
+
   while(first != NULL && i--)
   {
     first = first -> next;
@@ -200,6 +197,12 @@ int * Generate_Sequence(int size)
   int num = Number_Of_Elements(n);
 
   int * array = malloc(sizeof(int) * num);
+
+  if(array == NULL)
+  {
+    printf("Memory allocation failed\n");
+    return NULL;
+  }
 
   int i, j, count = 0;
 
@@ -261,7 +264,7 @@ void Print_Struct(Node * values)
 // Destroys a linked list
 void Destroy_Struct(Node * a)
 {
-  if(!a)
+  if(a == NULL)
   {
     return;
   }
@@ -305,4 +308,12 @@ int Calculate_Number(int i, int j)
   }
 
   return number;
+}
+
+
+
+void Screen_Dump(double io, double sort)
+{
+  printf("I/O time: %le\n", io);
+  printf("Sorting time: %le\n", sort);
 }

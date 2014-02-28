@@ -34,6 +34,6 @@ int Number_Of_Elements(int);
 int Highest_Power(int);
 int Calculate_Number(int, int);
 
-
 Node * Traverse(Node *, int);
+void Screen_Dump(double, double);
 #endif /* PA02_H */
