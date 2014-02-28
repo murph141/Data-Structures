@@ -104,15 +104,31 @@ Node * Shell_Sort(Node * root)
 {
   int * gaps = Generate_Sequence(root -> value);
 
-  int i;
+  int i;// j;
 
+  /*
   for(i = 0; i < Number_Of_Elements(Highest_Power(root -> value)); i++)
   {
     printf("gaps[%d] = %d\n", i, gaps[i]);
   }
+  */
 
-  // REMEMBER TO FREE THE ARRAY
+  int number = root -> value;
+
+  //Node * data = root -> next;
+
+  for(i = 0; i < Number_Of_Elements(Highest_Power(number)); i++)
+  {
+    int temp = gaps[i];
+
+    //for(j = temp; j < number; j++)
+    //{
+
+    //printf("%d\n", temp);
+  }
+
   free(gaps);
+
   return root;
 }
 
@@ -126,9 +142,19 @@ int * Generate_Sequence(int size)
 
   int i, j, count = 0;
 
+  /*
   for(i = 0; i <= n; i++)
   {
     for(j = 0; j <= i; j++)
+    {
+      array[count++] = Calculate_Number(i - j, j);
+    }
+  }
+  */
+
+  for(i = n; i >= 0; i--)
+  {
+    for(j = i; j >= 0; j--)
     {
       array[count++] = Calculate_Number(i - j, j);
     }
