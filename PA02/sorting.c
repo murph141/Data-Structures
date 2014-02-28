@@ -37,7 +37,8 @@ Node * Load_File(char * input_file)
   dummy -> value = numbers;
   dummy -> next = NULL;
 
-  Node * root = dummy;
+  Node * root = NULL, * prev = NULL;
+  // Node * root = dummy;
 
   while(numbers--)
   {
@@ -47,24 +48,39 @@ Node * Load_File(char * input_file)
       return NULL;
     }
 
-    dummy -> next = Create_Node(temp);
+    root = Create_Node(temp);
 
-    if(dummy -> next == NULL)
+    if(root == NULL)
     {
-      printf("Memory allocation failed\n");
-      return NULL;
+      root -> next = NULL;
+    }
+    else
+    {
+      root -> next = prev;
     }
 
-    dummy = dummy -> next;
+    prev = root;
+
+    /*
+       dummy -> next = Create_Node(temp);
+
+       if(dummy -> next == NULL)
+       {
+       printf("Memory allocation failed\n");
+       return NULL;
+       }
+
+       dummy = dummy -> next;
+       */
   }
 
-  dummy -> next = NULL;
+  dummy -> next = root;
 
-  //Print_Struct(root);
+  //Print_Struct(dummy);
 
   fclose(iptr);
 
-  return root;
+  return dummy;
 }
 
 
@@ -114,11 +130,11 @@ Node * Shell_Sort(Node * root)
   long temp;
 
   /*
-  for(i = 0; i < Number_Of_Elements(Highest_Power(root -> value)); i++)
-  {
-    printf("gaps[%d] = %d\n", i, gaps[i]);
-  }
-  */
+     for(i = 0; i < Number_Of_Elements(Highest_Power(root -> value)); i++)
+     {
+     printf("gaps[%d] = %d\n", i, gaps[i]);
+     }
+     */
 
   int number = root -> value;
   int size = Number_Of_Elements(Highest_Power(number));
@@ -137,7 +153,7 @@ Node * Shell_Sort(Node * root)
     {
       temp = Traverse(data, j) -> value;
 
-    //  printf("%li %d\n", temp, j);
+      //  printf("%li %d\n", temp, j);
 
       i = j;
 
@@ -154,23 +170,23 @@ Node * Shell_Sort(Node * root)
   }
 
   /*
-  for(i = 0; i < size; i++)
-  {
-    int temp = gaps[i];
+     for(i = 0; i < size; i++)
+     {
+     int temp = gaps[i];
 
-    List * data = malloc(sizeof(List) * temp);
+     List * data = malloc(sizeof(List) * temp);
 
-    List * head = data;
+     List * head = data;
 
-    for(j = 0; j < temp; j++)
-    {
-      for(k = j; k < size; k += temp)
-      {
-        List -> node = malloc(sizeof(Node));
-        List -> node -> value = 
+     for(j = 0; j < temp; j++)
+     {
+     for(k = j; k < size; k += temp)
+     {
+     List -> node = malloc(sizeof(Node));
+     List -> node -> value = 
 
-  }
-  */
+     }
+     */
 
   free(gaps);
 
@@ -207,14 +223,14 @@ int * Generate_Sequence(int size)
   int i, j, count = 0;
 
   /*
-  for(i = 0; i <= n; i++)
-  {
-    for(j = 0; j <= i; j++)
-    {
-      array[count++] = Calculate_Number(i - j, j);
-    }
-  }
-  */
+     for(i = 0; i <= n; i++)
+     {
+     for(j = 0; j <= i; j++)
+     {
+     array[count++] = Calculate_Number(i - j, j);
+     }
+     }
+     */
 
   for(i = n; i >= 0; i--)
   {
