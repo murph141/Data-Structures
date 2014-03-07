@@ -1,6 +1,6 @@
 GCC = gcc
 CFLAGS = -Wall -Werror -Wshadow -ggdb -O3
-SOURCES = sorting.c sorting_main.c
+SOURCES = pa03.c
 OBJS = $(SOURCES:.c=.o)
 HDRS = pa03.h
 EXECUTABLE = proj3
