@@ -1,8 +1,8 @@
 GCC = gcc
-CFLAGS = -Wall -Werror -Wshadow -ggdb -O3
-SOURCES = pa03.c
+CFLAGS = -Wall -Werror -Wshadow -Wbad-function-cast -ggdb -O3
+SOURCES = packing.c main.c
 OBJS = $(SOURCES:.c=.o)
-HDRS = pa03.h
+HDRS = packing.h
 EXECUTABLE = proj3
 VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose
 LATEX = WriteUp
