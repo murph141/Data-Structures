@@ -7,6 +7,7 @@ typedef struct node {
   int parent;
   double height;
   double width;
+  char slice;
 } Node;
 
 Node * Load_File(char *);

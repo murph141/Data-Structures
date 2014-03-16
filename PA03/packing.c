@@ -76,13 +76,17 @@ Node * Load_File(char * input_file)
       fscanf(fptr, " %lf %lf", &width, &height);
       arr[node].width = width;
       arr[node].height = height;
+      arr[node].slice = '-';
     }
     else
     {
+      arr[node].slice = ch;
+
       while(ch != '\n' && ch != EOF)
       {
         ch = fgetc(fptr);
       }
+
       arr[node].width = 0;
       arr[node].height = 0;
     }
@@ -107,6 +111,46 @@ Node * Fix_Values(Node * arr)
 
 void Special_Post_Order(Node * arr, int index)
 {
+  if(index == -1)
+  {
+    return;
+  }
+
+  Special_Post_Order(arr, arr[index].left);
+  Special_Post_Order(arr, arr[index].right);
+
+  if(arr[index].width == 0 && arr[arr[index].left].width != 0 && arr[arr[index].right].width != 0)
+  {
+    if(arr[index].slice == 'V')
+    {
+      arr[index].width = arr[arr[index].left].width + arr[arr[index].right].width;
+      
+      if(arr[arr[index].left].height > arr[arr[index].right].height)
+      {
+        arr[index].height = arr[arr[index].left].height;
+      }
+      else
+      {
+        arr[index].height = arr[arr[index].right].height;
+      }
+    }
+    else
+    {
+      arr[index].height = arr[arr[index].left].height + arr[arr[index].right].height;
+
+      if(arr[arr[index].left].width > arr[arr[index].right].width)
+      {
+        arr[index].width = arr[arr[index].left].width;
+      }
+      else
+      {
+        arr[index].width = arr[arr[index].right].width;
+      }
+    }
+    printf("%d %lf %lf %c\n", index, arr[index].height, arr[index].width, arr[index].slice);
+    return;
+  }
+
 }
 
 void Screen_Dump(Node * arr)
