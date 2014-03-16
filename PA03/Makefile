@@ -1,10 +1,11 @@
 GCC = gcc
-CFLAGS = -Wall -Werror -Wshadow -Wbad-function-cast -ggdb -O3
+CFLAGS = -Wall -Werror -Wshadow -Wbad-function-cast -ggdb
 SOURCES = packing.c main.c
 OBJS = $(SOURCES:.c=.o)
 HDRS = packing.h
 EXECUTABLE = proj3
-VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose
+LOGFILE = log
+VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose --log-file=$(LOGFILE)
 LATEX = WriteUp
 
 .PHONY: all clean test
@@ -17,11 +18,11 @@ $(EXECUTABLE): $(OBJS) $(HDRS)
 .c.o:
 	$(GCC) $(CFLAGS) -c $*.c
 
-clean:
-	rm -rf *.o $(EXECUTABLE) output ${LATEX}.{pdf,aux,log}
-
 test: all
 	$(VALGRIND) ./$(EXECUTABLE) input output
 
 latex: $(LATEX).tex
 	pdflatex $(LATEX)
+
+clean:
+	rm -rf *.o $(EXECUTABLE) output ${LATEX}.{pdf,aux,log} $(LOGFILE)
