@@ -12,6 +12,7 @@ int main(int argc, char * argv[])
   }
 
   char * input_file = argv[1];
+  char * output_file = argv[2];
   
   Node * Values = Load_File(input_file);
 
@@ -22,9 +23,17 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  Screen_Dump(Values);
+  Special_Post_Order(Values, Values[0].parent);
 
-  Special_Post_Order(Values, Values[0].width);
+  int test = Save_File(Values, output_file);
+
+  if(test == 1)
+  {
+    printf("Save_File function execution unsuccessful\n");
+    return EXIT_FAILURE;
+  }
+
+  Screen_Dump(Values);
 
   free(Values);
   return EXIT_SUCCESS;

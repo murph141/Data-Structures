@@ -7,13 +7,17 @@ typedef struct node {
   int parent;
   double height;
   double width;
+  double x;
+  double y;
   char slice;
 } Node;
 
+int Save_File(Node *, char *);
 Node * Load_File(char *);
 Node * Fix_Values(Node *);
 
 void Special_Post_Order(Node *, int);
+void Coordinates(Node *, int);
 
 // Used for the screen dump
 void Screen_Dump(Node *);

@@ -5,7 +5,7 @@
 Node * Load_File(char * input_file)
 {
   FILE * fptr = fopen(input_file, "r");
-  
+
   // Check to make sure you have access to the file/it exists
   if(fptr == NULL)
   {
@@ -62,11 +62,13 @@ Node * Load_File(char * input_file)
 
       if(arr[node].parent == -1)
       {
-        arr[0].width = node;
+        arr[0].parent = node;
       }
 
       arr[node].left = left;
       arr[node].right = right;
+      arr[node].x = 0;
+      arr[node].y = 0;
     }
 
     char ch = fgetc(fptr);
@@ -93,11 +95,11 @@ Node * Load_File(char * input_file)
   }
 
   /*
-  for(i = 0; i <= nodes; i++)
-  {
-    printf("%lf %lf\n", arr[i].height, arr[i].width);
-  }
-  */
+     for(i = 0; i <= nodes; i++)
+     {
+     printf("%lf %lf\n", arr[i].height, arr[i].width);
+     }
+     */
 
   fclose(fptr);
 
@@ -124,7 +126,7 @@ void Special_Post_Order(Node * arr, int index)
     if(arr[index].slice == 'V')
     {
       arr[index].width = arr[arr[index].left].width + arr[arr[index].right].width;
-      
+
       if(arr[arr[index].left].height > arr[arr[index].right].height)
       {
         arr[index].height = arr[arr[index].left].height;
@@ -150,12 +152,11 @@ void Special_Post_Order(Node * arr, int index)
     printf("%d %lf %lf %c\n", index, arr[index].height, arr[index].width, arr[index].slice);
     return;
   }
-
 }
 
 void Screen_Dump(Node * arr)
 {
-  int root = arr[0].width;
+  int root = arr[0].parent;
 
   printf("Preorder: ");
   Pre_Order(arr, root);
@@ -168,6 +169,9 @@ void Screen_Dump(Node * arr)
   printf("Postorder: ");
   Post_Order(arr, root);
   printf("\n");
+
+  printf("Width: %le\n", arr[root].width);
+  printf("Height: %le\n", arr[root].height);
 }
 
 
@@ -213,4 +217,40 @@ void In_Order(Node * arr, int index)
   printf("%d ", index);
 
   In_Order(arr, arr[index].right);
+}
+
+int Save_File(Node * arr, char * output_file)
+{
+  FILE * fptr = fopen(output_file, "w");
+
+  if(fptr == NULL)
+  {
+    printf("Error: File opening unsuccessful\n");
+    return 1;
+  }
+
+  if(fprintf(fptr, "%d\n", (arr[0].parent + 1) / 2) < 0)
+  {
+    printf("Error: Outputting to file unsuccessful\n");
+    return 1;
+  }
+
+  int i;
+
+
+  for(i = 1; i <= ((arr[0].parent + 1) / 2); i++)
+  {
+    if(fprintf(fptr, "%d %le %le %le %le\n", i, arr[i].width, arr[i].height, arr[i].x, arr[i].y) < 0)
+    {
+      printf("Error Outputting to file unsuccessfu;\n");
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+
+void Coordinates(Node * arr, int index)
+{
 }
