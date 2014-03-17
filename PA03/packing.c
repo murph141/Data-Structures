@@ -251,19 +251,58 @@ int Save_File(Node * arr, char * output_file)
 }
 
 
-void Deepest_Node(Node * arr, int index, int depth, int * max_depth)
+int Deepest_Node(Node * arr, int index)
 {
-  if(index == -1)
+  while(arr[index].right != -1 && arr[index].left != -1)
   {
-    return;
+    if(arr[index].slice == 'V')
+    {
+      index = arr[index].left;
+    }
+    else
+    {
+      index = arr[index].right;
+    }
   }
+  
+  return index;
+}
 
-  if(*max_depth < depth)
+
+/*
+void Coordinates(Node * arr)
+{
+  int index = arr[0].right;
+  int temp;
+
+  while(arr[index].parent != -1)
   {
-    *max_depth = depth;
-    arr[0].right = index;
+    if(arr[arr[index].parent].slice == 'V')
+    {
+      if(arr[arr[index].parent].left == index)
+      {
+        arr[arr[arr[index].parent].right].x += arr[index].width;
+      }
+      else
+      {
+        arr[index].x += arr[arr[arr[index].parent].left].width;
+      }
+    }
+    else
+    {
+      if(arr[arr[index].parent].left == index)
+      {
+        arr[index].y += arr[arr[arr[index].parent].right].height;
+      }
+      else
+      {
+        arr[arr[arr[index].parent].left].y += arr[index].height;
+      }
+    }
+    index = arr[index].parent;
   }
-
-  Deepest_Node(arr, arr[index].left, depth + 1, max_depth);
-  Deepest_Node(arr, arr[index].right, depth + 1, max_depth);
+}
+*/
+void Coordinates(Node * arr)
+{
 }

@@ -25,11 +25,9 @@ int main(int argc, char * argv[])
 
   Special_Post_Order(Values, Values[0].parent);
 
-  int max_depth = 0;
+  Values[0].right = Deepest_Node(Values, Values[0].parent);
 
-  Deepest_Node(Values, Values[0].parent, 0, &max_depth);
-
-  printf("%d %d\n", max_depth, Values[0].right);
+  Coordinates(Values);
 
   int test = Save_File(Values, output_file);
 
