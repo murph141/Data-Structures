@@ -17,7 +17,7 @@ Node * Load_File(char *);
 Node * Fix_Values(Node *);
 
 void Special_Post_Order(Node *, int);
-void Coordinates(Node *, int);
+void Deepest_Node(Node *, int, int, int *);
 
 // Used for the screen dump
 void Screen_Dump(Node *);

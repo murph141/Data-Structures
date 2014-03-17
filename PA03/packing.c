@@ -251,6 +251,19 @@ int Save_File(Node * arr, char * output_file)
 }
 
 
-void Coordinates(Node * arr, int index)
+void Deepest_Node(Node * arr, int index, int depth, int * max_depth)
 {
+  if(index == -1)
+  {
+    return;
+  }
+
+  if(*max_depth < depth)
+  {
+    *max_depth = depth;
+    arr[0].right = index;
+  }
+
+  Deepest_Node(arr, arr[index].left, depth + 1, max_depth);
+  Deepest_Node(arr, arr[index].right, depth + 1, max_depth);
 }
