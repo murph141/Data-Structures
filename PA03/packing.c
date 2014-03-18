@@ -171,6 +171,8 @@ void Screen_Dump(Node * arr)
   printf("X-Coordinate %le\n", arr[(arr[0].left + 1) / 2].x);
   printf("Y-Coordinate %le\n", arr[(arr[0].left + 1) / 2].y);
   printf("\n");
+
+  printf("Elapsed Time %le\n", arr[0].height);
 }
 
 

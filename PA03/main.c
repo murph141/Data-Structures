@@ -23,9 +23,17 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+  clock_t time;
+
+  time = clock();
+
   Special_Post_Order(Values, Values[0].left);
 
   Fix_Coordinates(Values, Values[0].left);
+
+  time = clock() - time;
+
+  Values[0].height = time / CLOCKS_PER_SEC;
 
   int test = Save_File(Values, output_file);
 
