@@ -4,7 +4,6 @@
 typedef struct node {
   int left;
   int right;
-  int parent;
   double height;
   double width;
   double x;
@@ -18,7 +17,6 @@ Node * Fix_Values(Node *);
 
 void Special_Post_Order(Node *, int);
 int Deepest_Node(Node *, int);
-void Coordinates(Node *);
 void Fix_Coordinates(Node *, int);
 
 // Used for the screen dump

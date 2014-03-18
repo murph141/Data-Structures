@@ -47,7 +47,6 @@ Node * Load_File(char * input_file)
   // Hard-coded values for the first array value
   arr[0].left = -1;
   arr[0].right = -1;
-  arr[0].parent = -1;
   arr[0].width = 0;
   arr[0].height = 0;
 
@@ -58,11 +57,9 @@ Node * Load_File(char * input_file)
 
     if(fscanf(fptr, "%d %d %d %d", &node, &parent, &left, &right) == 4)
     {
-      arr[node].parent = parent;
-
-      if(arr[node].parent == -1)
+      if(parent == -1)
       {
-        arr[0].parent = node;
+        arr[0].left = node;
       }
 
       arr[node].left = left;
@@ -93,13 +90,6 @@ Node * Load_File(char * input_file)
       arr[node].height = 0;
     }
   }
-
-  /*
-     for(i = 0; i <= nodes; i++)
-     {
-     printf("%lf %lf\n", arr[i].height, arr[i].width);
-     }
-     */
 
   fclose(fptr);
 
@@ -149,29 +139,38 @@ void Special_Post_Order(Node * arr, int index)
         arr[index].width = arr[arr[index].right].width;
       }
     }
-    printf("%d %lf %lf %c\n", index, arr[index].height, arr[index].width, arr[index].slice);
     return;
   }
 }
 
 void Screen_Dump(Node * arr)
 {
-  int root = arr[0].parent;
+  int root = arr[0].left;
+
+  printf("\n");
 
   printf("Preorder: ");
   Pre_Order(arr, root);
+  printf("\n");
   printf("\n");
 
   printf("Inorder: ");
   In_Order(arr, root);
   printf("\n");
+  printf("\n");
 
   printf("Postorder: ");
   Post_Order(arr, root);
   printf("\n");
+  printf("\n");
 
   printf("Width: %le\n", arr[root].width);
   printf("Height: %le\n", arr[root].height);
+  printf("\n");
+
+  printf("X-Coordinate %le\n", arr[(arr[0].left + 1) / 2].x);
+  printf("Y-Coordinate %le\n", arr[(arr[0].left + 1) / 2].y);
+  printf("\n");
 }
 
 
@@ -229,7 +228,7 @@ int Save_File(Node * arr, char * output_file)
     return 1;
   }
 
-  if(fprintf(fptr, "%d\n", (arr[0].parent + 1) / 2) < 0)
+  if(fprintf(fptr, "%d\n", (arr[0].left + 1) / 2) < 0)
   {
     printf("Error: Outputting to file unsuccessful\n");
     return 1;
@@ -238,7 +237,7 @@ int Save_File(Node * arr, char * output_file)
   int i;
 
 
-  for(i = 1; i <= ((arr[0].parent + 1) / 2); i++)
+  for(i = 1; i <= ((arr[0].left + 1) / 2); i++)
   {
     if(fprintf(fptr, "%d %le %le %le %le\n", i, arr[i].width, arr[i].height, arr[i].x, arr[i].y) < 0)
     {
@@ -264,45 +263,34 @@ int Deepest_Node(Node * arr, int index)
       index = arr[index].right;
     }
   }
-  
+
   return index;
 }
 
 
-/*
-void Coordinates(Node * arr)
+void Fix_Coordinates(Node * arr, int index)
 {
-  int index = arr[0].right;
-  int temp;
-
-  while(arr[index].parent != -1)
+  if(arr[index].slice == 'V')
   {
-    if(arr[arr[index].parent].slice == 'V')
-    {
-      if(arr[arr[index].parent].left == index)
-      {
-        arr[arr[arr[index].parent].right].x += arr[index].width;
-      }
-      else
-      {
-        arr[index].x += arr[arr[arr[index].parent].left].width;
-      }
-    }
-    else
-    {
-      if(arr[arr[index].parent].left == index)
-      {
-        arr[index].y += arr[arr[arr[index].parent].right].height;
-      }
-      else
-      {
-        arr[arr[arr[index].parent].left].y += arr[index].height;
-      }
-    }
-    index = arr[index].parent;
+    arr[arr[index].right].x = arr[index].x + arr[arr[index].left].width;
+    arr[arr[index].right].y = arr[index].y;
+
+    arr[arr[index].left].x = arr[index].x;
+    arr[arr[index].left].y = arr[index].y;
   }
-}
-*/
-void Coordinates(Node * arr)
-{
+  else if(arr[index].slice == 'H')
+  {
+    arr[arr[index].right].x = arr[index].x;
+    arr[arr[index].right].y = arr[index].y;
+
+    arr[arr[index].left].x = arr[index].x;
+    arr[arr[index].left].y = arr[index].y + arr[arr[index].right].height;
+  }
+  else
+  {
+    return;
+  }
+
+  Fix_Coordinates(arr, arr[index].left);
+  Fix_Coordinates(arr, arr[index].right);
 }

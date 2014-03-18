@@ -23,11 +23,9 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  Special_Post_Order(Values, Values[0].parent);
+  Special_Post_Order(Values, Values[0].left);
 
-  Values[0].right = Deepest_Node(Values, Values[0].parent);
-
-  Coordinates(Values);
+  Fix_Coordinates(Values, Values[0].left);
 
   int test = Save_File(Values, output_file);
 
