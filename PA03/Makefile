@@ -1,5 +1,5 @@
 GCC = gcc
-CFLAGS = -Wall -Werror -Wshadow -Wbad-function-cast -ggdb
+CFLAGS = -Wall -Werror -Wshadow -Wbad-function-cast -O3
 SOURCES = packing.c main.c
 OBJS = $(SOURCES:.c=.o)
 HDRS = packing.h
