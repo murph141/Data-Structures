@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include "packing.h"
+#include "packing.h" // Read my header file for a breakdown of the structure I used and miscellaneous things
 
 // Load the values in to the file
 Node * Load_File(char * input_file)

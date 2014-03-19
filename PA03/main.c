@@ -15,7 +15,7 @@ int main(int argc, char * argv[])
   // The input and output files provided by the user
   char * input_file = argv[1];
   char * output_file = argv[2];
-  
+
   // Load the file
   Node * Values = Load_File(input_file);
 
@@ -27,9 +27,9 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  clock_t time; // Set up a clock variable
+  clock_t time; // Used to determine the amount of time taken to sort
 
-  time = clock(); // Packing time
+  time = clock();
 
   Special_Post_Order(Values, Values[0].left);
 

@@ -3,6 +3,15 @@
 #define PACKING_H
 
 // Node structure
+// Since I implemented an array, the left and right values are stored as integers instead of pointers
+//    Each left and right node of a given node can be accessed by using arr[arr[index].left]
+// I allocated space for n+1 nodes (So I could access values 1 to n)
+//    Because of this arr[0] is not used in the tree structure
+//    However, it is used as storage for the total number of nodes to avoid the use of a pointer
+//
+// The height and width are stored as doubles
+// The x and y coordinates are stored as doubles
+// The slicing of the node is stored as a characters
 typedef struct node {
   int left;
   int right;
@@ -17,7 +26,7 @@ typedef struct node {
 int Save_File(Node *, char *);
 Node * Load_File(char *);
 
-// Fill in height and width values
+// Fill in height and width values of non-leaf nodes, since leaf nodes' values were stored during the file loading
 void Special_Post_Order(Node *, int);
 
 // Fill in corrdinates
