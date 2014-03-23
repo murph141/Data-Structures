@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=0.5in]{geometry}
+\usepackage{amsmath}
+
+\begin{document}
+
+\begin{flushright}
+  Eric Murphy \\
+  ECE368 \\
+  Programming Assignment 3 \\
+  3/19/14
+\end{flushright}
+
+\subsection*{Output and Runtime Analysis:}
+Using the input r0\_flr.txt, I obtain the results:\\
+
+Preorder: 5 3 4 1 2\\
+\indent Inorder: 3 5 1 4 2\\
+\indent Postorder: 3 1 2 4 5\\
+\indent Width: 6.488700e+04\\
+\indent Height: 9.299900e+04\\
+\indent X-Coordinate 0.000000e+00\\
+\indent Y-Coordinate 0.000000e+00\\
+\indent Elapsed Time 0.000000e+00
+
+\noindent \newline The amount of time that it takes from my program to run is so low due to the fact that I call malloc only once in my program, regardless of the size of the input file.
+I implemented the tree structure as an array by using the index number of the rectangle to correspond to the index in the array.
+The $0^{\mbox{th}}$ element was used as temporary storage throughout the program.
+By using an array to implement a tree structure instead of a linked list or anything else, I am able to have $O(1)$ lookup times, making my program very fast.
+Also, since I used an array as the tree structure, I was able to store the left and right values of the tree as the values of the left and right index, integers, instead of pointers.
+
+\noindent \newline The tree traversals are done by moving from one array index to another.  Each array index holds a node that contains information involving the width, height, x and y coordinates, and left and right values.  The traversals are done by looking up the value of the left and right indicies and moving to that node in the array.
+
+\subsection*{Space and Time Complexity:}
+My space complexity can be determined by the highest number of stack frames that are in use at any given time in my function.
+When doing my pre, in, and post-order ``tree'' (I implemented the tree as an array) traversals, the largest number of stack frames that are present is $log(n)$, therefore my space complexity is $O(log(n))$.
+The largest number of stack frames is $log(n)$ because $log(n)$ is the height of the tree (Where $n$ is the number of nodes in the tree).
+
+\noindent \newline My time complexity can be determined by the number of nodes that I visit on any given traversal in my program when not using loops and how many times the loops I use are iterated.
+Since I have to visit every node in my array when not using loops, the time complexity of my program for the non-looping portion is $T(n) \in O(n)$.
+When using loops, my program visits each node in the array only once, so the time complexity for the looping portion is $T(n) \in O(n)$.
+Since both parts of my program are of $O(n)$, the total time complexity of my program is $O(n)$ (Where $n$ is the number of nodes in the tree).
+
+\end{document}
