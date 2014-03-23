@@ -5,7 +5,7 @@ OBJS = $(SOURCES:.c=.o)
 HDRS = packing.h
 EXECUTABLE = proj3
 LOGFILE = log
-VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose --log-file=$(LOGFILE)
+VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose # --log-file=$(LOGFILE)
 LATEX = WriteUp
 
 .PHONY: all clean test

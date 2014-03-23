@@ -46,6 +46,7 @@ Node * Load_File(char * input_file)
   int i; // Counter variable
 
   // Hard-coded values for the first array value
+  // Avoids any possible errors in the future
   arr[0].left = -1;
   arr[0].right = -1;
   arr[0].width = 0;
@@ -65,6 +66,7 @@ Node * Load_File(char * input_file)
         arr[0].left = node;
       }
 
+      //Assign values, the x and y coordinates are not known yet
       arr[node].left = left;
       arr[node].right = right;
       arr[node].x = 0;
@@ -76,6 +78,8 @@ Node * Load_File(char * input_file)
     ch = fgetc(fptr);
     if(ch == '-')
     {
+      //If we are at a leaf node
+      
       fscanf(fptr, " %lf %lf", &width, &height);
       arr[node].width = width;
       arr[node].height = height;
@@ -83,8 +87,11 @@ Node * Load_File(char * input_file)
     }
     else
     {
+      //If we are not at a leaf node
+      
       arr[node].slice = ch;
 
+      // Move to the end of the line
       while(ch != '\n' && ch != EOF)
       {
         ch = fgetc(fptr);
@@ -95,7 +102,7 @@ Node * Load_File(char * input_file)
     }
   }
 
-  fclose(fptr);
+  fclose(fptr); //Close the file
 
   return arr;
 }
@@ -156,6 +163,7 @@ void Screen_Dump(Node * arr)
 {
   int root = arr[0].left; //The root node's value
 
+  //New lines inserted to adhere to the given output formatting
   printf("\n");
 
   printf("Preorder: ");

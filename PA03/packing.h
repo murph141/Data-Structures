@@ -23,8 +23,8 @@ typedef struct node {
 } Node;
 
 // File I/O
-int Save_File(Node *, char *);
 Node * Load_File(char *);
+int Save_File(Node *, char *); // Returns a 0 or 1 (0 if successful, 1 if unsuccessful)
 
 // Fill in height and width values of non-leaf nodes, since leaf nodes' values were stored during the file loading
 void Special_Post_Order(Node *, int);
@@ -34,6 +34,8 @@ void Coordinates(Node *, int);
 
 // Used for the screen dump
 void Screen_Dump(Node *);
+
+// Assorted tree traversals
 void Post_Order(Node *, int);
 void Pre_Order(Node *, int);
 void In_Order(Node *, int);
