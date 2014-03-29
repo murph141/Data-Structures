@@ -1,14 +1,14 @@
 GCC = gcc
-CFLAGS = -Wall -Werror -Wshadow -Wbad-function-cast -ggdb -O3
-SOURCES =
+CFLAGS = -Wall -Werror -Wshadow -Wbad-function-cast -ggdb
+SOURCES = reroot.c
 OBJS = $(SOURCES:.c=.o)
-HDRS = .h
+HDRS = reroot.h
 EXECUTABLE = proj4
 LOGFILE = log
-VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose # --log-file=$(LOGFILE)
+VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose --log-file=$(LOGFILE)
 LATEX = WriteUp
 
-.PHONY: all clean test
+.PHONY: all clean test latex
 
 all: $(SOURCES) $(EXECUTABLE)
 
