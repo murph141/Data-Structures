@@ -54,6 +54,8 @@ Node * Load_File(char * input)
 
   n3 = pop(s);
 
+  fclose(fptr);
+
   return n3;
 }
 
@@ -92,12 +94,12 @@ Node * Create_Node(double width, double height)
 
 Node * pop(Stack * s)
 {
-  Node * n = s -> item;
+  Stack * top = s;
+  Node * n = top -> item;
 
-  Stack * s2 = s;
-  s = s -> next;
+  s = top -> next;
 
-  free(s2);
+  free(top);
 
   return n;
 }
