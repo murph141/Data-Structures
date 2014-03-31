@@ -35,7 +35,7 @@ Node * Load_File(char * input)
     if(a == '(')
     {
       fscanf(fptr, "%lf, %lf)", &width, &height);
-      s = push(s, Create_Node(width, height));
+       push(&s, Create_Node(width, height));
     }
     else
     {
@@ -46,7 +46,7 @@ Node * Load_File(char * input)
       n3 -> left = n2;
       n3 -> right = n1;
 
-      push(s, n3);
+      push(&s, n3);
     }
 
     a = fgetc(fptr);
@@ -69,13 +69,13 @@ int isEmpty(Stack * s)
   return 0;
 }
 
-Stack * push(Stack * s, Node * n)
+void push(Stack ** s, Node * n)
 {
   Stack * s2 = malloc(sizeof(Stack));
-  s2 -> next = s;
+  s2 -> next = * s;
   s2 -> item = n;
 
-  return s2;
+  *s = s2;
 }
 
 Node * Create_Node(double width, double height)

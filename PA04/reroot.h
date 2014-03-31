@@ -18,7 +18,7 @@ Node * Load_File(char *);
 
 // Stack operations
 int isEmpty(Stack *);
-Stack * push(Stack *, Node *);
+void push(Stack **, Node *);
 Node * pop(Stack **);
 
 Node * Create_Node(double, double);
