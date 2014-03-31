@@ -19,7 +19,7 @@ Node * Load_File(char *);
 // Stack operations
 int isEmpty(Stack *);
 Stack * push(Stack *, Node *);
-Node * pop(Stack *);
+Node * pop(Stack **);
 
 Node * Create_Node(double, double);
 #endif /* REROOT_H */

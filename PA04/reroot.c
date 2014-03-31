@@ -39,8 +39,8 @@ Node * Load_File(char * input)
     }
     else
     {
-      n1 = pop(s);
-      n2 = pop(s);
+      n1 = pop(&s);
+      n2 = pop(&s);
 
       n3 = Create_Node(0, 0);
       n3 -> left = n2;
@@ -52,7 +52,7 @@ Node * Load_File(char * input)
     a = fgetc(fptr);
   }
 
-  n3 = pop(s);
+  n3 = pop(&s);
 
   fclose(fptr);
 
@@ -92,12 +92,17 @@ Node * Create_Node(double width, double height)
   return n;
 }
 
-Node * pop(Stack * s)
+Node * pop(Stack ** s)
 {
-  Stack * top = s;
+  if(isEmpty(*s))
+  {
+    return NULL;
+  }
+
+  Stack * top = * s;
   Node * n = top -> item;
 
-  s = top -> next;
+  * s = top -> next;
 
   free(top);
 
