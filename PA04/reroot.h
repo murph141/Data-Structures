@@ -24,12 +24,11 @@ int isEmpty(Stack *);
 void push(Stack **, Node *);
 Node * pop(Stack **);
 
-Node * Create_Node(double, double, char);
-
-void destroy_Tree(Node *);
+// Used to fix the coordinates (PA03 stuff)
 void Special_Post_Order(Node *);
 void Coordinates(Node *);
 
+// Used for rerooting
 Node * Make_Dummy(Node *);
 void Reroot(Node *, double *);
 
@@ -38,5 +37,9 @@ void Screen_Dump(Node *);
 void Pre_Order(Node *);
 void In_Order(Node *);
 void Post_Order(Node *);
+
+// Creation and deletion
+Node * Create_Node(double, double, char);
+void destroy_Tree(Node *);
 
 #endif /* REROOT_H */
