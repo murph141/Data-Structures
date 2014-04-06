@@ -30,6 +30,9 @@ void destroy_Tree(Node *);
 void Special_Post_Order(Node *);
 void Coordinates(Node *);
 
+Node * Make_Dummy(Node *);
+void Reroot(Node *, double *);
+
 // Screen dump
 void Screen_Dump(Node *);
 void Pre_Order(Node *);

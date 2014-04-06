@@ -30,11 +30,31 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
+  double area = Tree -> width * Tree -> height;
+
+  printf("%le\n", area);
+
+  Tree = Make_Dummy(Tree);
+
+  Reroot(Tree, &area);
+
   Screen_Dump(Tree);
 
   destroy_Tree(Tree);
 
   return EXIT_SUCCESS;
+}
+
+
+Node * Make_Dummy(Node * root)
+{
+  Node * n1 = calloc(1, sizeof(Node));
+  Node * n2 = calloc(1, sizeof(Node));
+
+  n2 -> left = n1;
+  n2 -> right = root;
+
+  return n2;
 }
 
 
@@ -366,4 +386,8 @@ void Post_Order(Node * root)
   {
     printf("%c", root -> slice);
   }
+}
+
+void Reroot(Node * root, double * area)
+{
 }
