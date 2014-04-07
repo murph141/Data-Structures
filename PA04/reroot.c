@@ -36,8 +36,6 @@ int main(int argc, char * argv[])
 
   Tree = Make_Dummy(Tree);
 
-  Reroot(Tree, &area);
-
   Screen_Dump(Tree);
 
   destroy_Tree(Tree);
@@ -51,6 +49,8 @@ Node * Make_Dummy(Node * root)
   Node * n1 = calloc(1, sizeof(Node));
   Node * n2 = calloc(1, sizeof(Node));
 
+  n1 -> slice = '-';
+  n2 -> slice = 'V';
   n2 -> left = n1;
   n2 -> right = root;
 
@@ -248,7 +248,7 @@ void Special_Post_Order(Node * root)
     else
     {
       root -> height = root -> left -> height + root -> right -> height;
-      
+
       if(root -> left -> width > root -> right -> width)
       {
         root -> width = root -> left -> width;
@@ -386,8 +386,4 @@ void Post_Order(Node * root)
   {
     printf("%c", root -> slice);
   }
-}
-
-void Reroot(Node * root, double * area)
-{
 }

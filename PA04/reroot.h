@@ -30,7 +30,6 @@ void Coordinates(Node *);
 
 // Used for rerooting
 Node * Make_Dummy(Node *);
-void Reroot(Node *, double *);
 
 // Screen dump
 void Screen_Dump(Node *);
