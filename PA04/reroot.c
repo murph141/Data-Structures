@@ -34,7 +34,10 @@ int main(int argc, char * argv[])
 
   printf("%le\n", area);
 
-  Tree = Make_Dummy(Tree);
+  double width = Tree -> right -> width;
+  double height = Tree -> right -> height;
+
+  Reroot(&width, &height, Tree -> right, Tree -> left -> width, Tree -> left -> height, 0, 0, 'V');
 
   Screen_Dump(Tree);
 
@@ -43,6 +46,7 @@ int main(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
+/*
 
 Node * Make_Dummy(Node * root)
 {
@@ -57,6 +61,7 @@ Node * Make_Dummy(Node * root)
   return n2;
 }
 
+*/
 
 Node * Load_File(char * input)
 {
@@ -385,5 +390,67 @@ void Post_Order(Node * root)
   else
   {
     printf("%c", root -> slice);
+  }
+}
+
+void Reroot(double * width, double * height, Node * root, double ow, double oh, double cw, double ch, char slice)
+{
+  if(root -> slice == '-' || root == NULL)
+  {
+    return;
+  }
+
+  double w, h;
+
+  if(slice == 'V')
+  {
+    w = ow + cw;
+
+    if(oh > ch)
+    {
+      h = oh;
+    }
+    else
+    {
+      h = ch;
+    }
+  }
+  else
+  {
+    h = oh + ch;
+
+    if(ow > cw)
+    {
+      w = ow;
+    }
+    else
+    {
+      w = cw;
+    }
+  }
+
+  if(root -> slice == 'V')
+  {
+    w += root -> width;
+
+    if(root -> height > h)
+    {
+      h = root -> height;
+    }
+  }
+  else
+  {
+    h += root -> height;
+
+    if(root -> width > w)
+    {
+      w = root -> width;
+    }
+  }
+
+  if((w * h) < (*width * *height))
+  {
+    *width = w;
+    *height = h;
   }
 }

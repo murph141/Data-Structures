@@ -28,9 +28,6 @@ Node * pop(Stack **);
 void Special_Post_Order(Node *);
 void Coordinates(Node *);
 
-// Used for rerooting
-Node * Make_Dummy(Node *);
-
 // Screen dump
 void Screen_Dump(Node *);
 void Pre_Order(Node *);
@@ -41,4 +38,5 @@ void Post_Order(Node *);
 Node * Create_Node(double, double, char);
 void destroy_Tree(Node *);
 
+void Reroot(double *, double *, Node *, double, double, double, double, char);
 #endif /* REROOT_H */
