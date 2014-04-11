@@ -1,0 +1,63 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=0.25in]{geometry}
+\usepackage{amsmath}
+
+\begin{document}
+
+\begin{flushright}
+  Eric Murphy \\
+  Programming Assignment 4 \\
+\end{flushright}
+
+\subsection*{Rerooting}
+Rerooting is performed on the tree without manipulating the tree. Rerooting is first called on the root node of the  binary tree, then slowly progresses down the tree (Since you have to reroot edges on top before you reroot bottem edges).
+For my implementation of rerooting, I call the left or the right side of the tree (depending on where I came from previously).
+Since I'm only able to call in certain directions, with respect to th previous call, I sent the direction that I rerooting on with each function.
+Given each direction, I then determine where I'm going to call next. Since I call in a certain direction I'm only about to call a certain side of the tree structure since it wouldn't work in both directions.
+While calling the function with a specific side of the tree structure each time, I also call the function with the value of the previous rerooting.
+I do this because these dimensions will be the dimensions of the child of the newly rerooted tree.
+Each time I call the reroot function, I also send the slice of the original node. I use this slice to determine how to arrange the children of the new node and the previously rerooted node.
+
+\subsection*{Runtimes and Outputs}
+The runtimes and outputs are given as follows:
+
+\noindent \newline Preorder: H(3.000000e+00, 3.000000e+00)V(4.000000e+00, 5.000000e+00)(7.000000e+00, 7.000000e+00)
+\noindent Inorder: (3.000000e+00, 3.000000e+00)H(4.000000e+00, 5.000000e+00)V(7.000000e+00, 7.000000e+00)
+\noindent Postorder: (3.000000e+00, 3.000000e+00)(4.000000e+00, 5.000000e+00)(7.000000e+00, 7.000000e+00)VH
+\noindent Width: 1.100000e+01
+\noindent Height: 1.000000e+01
+\noindent X-Coordinate: 0.000000e+00
+\noindent Y-Coordinate: 7.000000e+00
+\noindent Elapsed time: 0.000000e+00
+\noindent Best Width: 1.100000e+01
+\noindent Best Height: 8.000000e+00
+\noindent Elapsed time for re-rooting: 0.000000e+00
+
+\noindent \newline Since my rerooting algorithm doesn't alter the original binary tree, the time my program takes to complete is very low.  The best width and height are calculated my comparing the total areas and taking the width and height that correspond to the smallest area.
+
+\subsection*{Data Structures and Algorithms - Tree Generation}
+The data structure that I used to construct my rectangle packing algorithms was a binary tree.  I used a binary tree since I wanted to parse the input only once (an array would require a second pass).
+Rectangles were in sets of two so a binary tree constuction only seemed natural.
+
+\noindent \newline I also used a stack to construct my binary tree. Since the file contained a post-order traversal of the tree, I pushed and popped items on and off of the stack.
+The stack held the nodes that were to be added to the binary tree.  As nodes were popped off of the tree, they were added to different sections of the tree and the tree's root node was pushed back on to the stack.
+When the input file ended, the final tree was popped off of the stack and returned as the final tree.
+
+\noindent \newline I used many algorithms in order to construct my binary tree. I used the push, pop, and isempty stack algorithms. The push algorithm added an item to a stack and returned the new root of the stack. The pop item took an item off the stack, adjusted the root of the stack, and returned the item that was taken off of the stack. The isempty algorithm checked to see whether the stack was empty or not.
+
+\subsection*{Time and Space Complexity - Tree Construction Algorithm}
+The time complexity of my tree construction algorithm is $O(n)$, where $n$ denotes the total number of nodes in my binary tree ($n = 2r - 1$, where $r$ is the number of rectangles to be packed).
+My tree construction algorithm has a time complexity of $O(n)$ because I have to run through each of the nodes in the input file, which corresponds to each node in the binary tree that is being formed.
+
+\noindent \newline The space complexity of my tree construction algorithm is $O(n)$, where $n$ denotes the total number of nodes in my binary tree ($n = 2r - 1$, where $r$ is the number of rectangles to be packed).
+The space complexity of my tree construction algorithm is $O(n)$, because I have to allocate space for every node that was in the post-order traversal (which is all of the nodes).
+
+\subsection*{Time and Space Complexity - Rerooting Function}
+The time complexity of my rerooting function is $O(n)$, where $n$ denotes the number of nodes in the binary tree ($n = 2r - 1$, where $r$ is the number of rectangles to be packed).
+My time complexity is $O(n)$ since my rerooting function visits every node of the binary tree that I constructed from the input file.
+
+\noindent \newline The space complexity of my rerooting function is $O(1)$. My space complexity is constant since I store $4$ variables each time the function is called.
+The number of variables that I am allocating space for is independent of my data size.
+
+\end{document}
