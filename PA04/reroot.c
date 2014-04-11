@@ -34,19 +34,23 @@ int main(int argc, char * argv[])
 
   printf("%le\n", area);
 
-  double width = Tree -> right -> width;
-  double height = Tree -> right -> height;
+  double width = Tree -> width;
+  double height = Tree -> height;
 
-  Reroot(&width, &height, Tree -> right, Tree -> left -> width, Tree -> left -> height, 0, 0, 'V');
+
+  Reroot(&width, &height, Tree, 0, 0, Tree -> slice, 'L');
+
+  //Reroot(&width, &height, Tree -> left, Tree -> right -> width, Tree -> right -> width, Tree -> slice, 'L');
+  //Reroot(&width, &height, Tree -> left, Tree -> right -> width, Tree -> right -> width, Tree -> slice, 'R');
 
   Screen_Dump(Tree);
+
+  printf("\n%le %le\n", width, height);
 
   destroy_Tree(Tree);
 
   return EXIT_SUCCESS;
 }
-
-/*
 
 Node * Make_Dummy(Node * root)
 {
@@ -60,8 +64,6 @@ Node * Make_Dummy(Node * root)
 
   return n2;
 }
-
-*/
 
 Node * Load_File(char * input)
 {
@@ -393,64 +395,134 @@ void Post_Order(Node * root)
   }
 }
 
-void Reroot(double * width, double * height, Node * root, double ow, double oh, double cw, double ch, char slice)
+void Reroot(double * min_width, double * min_height, Node * root, double ow, double oh, char slice, char direction)
 {
-  if(root -> slice == '-' || root == NULL)
+  if(root -> slice == '-')
   {
     return;
   }
 
-  double w, h;
+  double w, h, width, height;
 
-  if(slice == 'V')
+  if(direction == 'R')
   {
-    w = ow + cw;
-
-    if(oh > ch)
+    if(slice == 'V')
     {
-      h = oh;
+      w = root -> left -> width + ow;
+
+      if(oh < root -> left -> height)
+      {
+        h = root -> left -> height;
+      }
+      else
+      {
+        h = oh;
+      }
     }
     else
     {
-      h = ch;
-    }
-  }
-  else
-  {
-    h = oh + ch;
+      h = root -> left -> height + oh;
 
-    if(ow > cw)
+      if(ow < root -> left -> width)
+      {
+        w = root -> left -> width;
+      }
+      else
+      {
+        w = ow;
+      }
+    }
+
+    if(root -> slice == 'V')
     {
-      w = ow;
+      width = w + root -> right -> width;
+
+      if(root -> right -> height < h)
+      {
+        height = h;
+      }
+      else
+      {
+        height = root -> right -> height;
+      }
     }
     else
     {
-      w = cw;
+      height = h + root -> right -> height;
+
+      if(root -> right -> width < w)
+      {
+        width = w;
+      }
+      else
+      {
+        width = root -> right -> width;
+      }
     }
   }
-
-  if(root -> slice == 'V')
+  else if(direction == 'L')
   {
-    w += root -> width;
-
-    if(root -> height > h)
+    if(slice == 'V')
     {
-      h = root -> height;
-    }
-  }
-  else
-  {
-    h += root -> height;
+      w = root -> right -> width + ow;
 
-    if(root -> width > w)
+      if(oh < root -> right -> height)
+      {
+        h = root -> right -> height;
+      }
+      else
+      {
+        h = oh;
+      }
+    }
+    else
     {
-      w = root -> width;
+      h = root -> right -> height + oh;
+
+      if(ow < root -> right -> width)
+      {
+        w = root -> right -> width;
+      }
+      else
+      {
+        w = ow;
+      }
+    }
+
+    if(root -> slice == 'V')
+    {
+      width = w + root -> left -> width;
+
+      if(root -> left -> height < h)
+      {
+        height = h;
+      }
+      else
+      {
+        height = root -> left -> height;
+      }
+    }
+    else
+    {
+      height = h + root -> left -> height;
+
+      if(root -> left -> width < w)
+      {
+        width = w;
+      }
+      else
+      {
+        width = root -> left -> width;
+      }
     }
   }
 
-  if((w * h) < (*width * *height))
+  if((width * height) < (*min_width * *min_height))
   {
-    *width = w;
-    *height = h;
+    *min_width = width;
+    *min_height = height;
   }
+
+  Reroot(min_width, min_height, root -> left, w, h, root -> slice, 'L');
+  Reroot(min_width, min_height, root -> right, w, h, root -> slice, 'R');
 }

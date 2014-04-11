@@ -38,5 +38,6 @@ void Post_Order(Node *);
 Node * Create_Node(double, double, char);
 void destroy_Tree(Node *);
 
-void Reroot(double *, double *, Node *, double, double, double, double, char);
+void Reroot(double *, double *, Node *, double, double, char, char);
+Node * Make_Dummy(Node *);
 #endif /* REROOT_H */
