@@ -30,15 +30,11 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  double area = Tree -> width * Tree -> height;
-
-  printf("%le\n", area);
-
   double width = Tree -> width;
   double height = Tree -> height;
 
-
   Reroot(&width, &height, Tree, 0, 0, Tree -> slice, 'L');
+  Reroot(&width, &height, Tree, 0, 0, Tree -> slice, 'R');
 
   //Reroot(&width, &height, Tree -> left, Tree -> right -> width, Tree -> right -> width, Tree -> slice, 'L');
   //Reroot(&width, &height, Tree -> left, Tree -> right -> width, Tree -> right -> width, Tree -> slice, 'R');
@@ -523,6 +519,14 @@ void Reroot(double * min_width, double * min_height, Node * root, double ow, dou
     *min_height = height;
   }
 
-  Reroot(min_width, min_height, root -> left, w, h, root -> slice, 'L');
-  Reroot(min_width, min_height, root -> right, w, h, root -> slice, 'R');
+  if(direction == 'R')
+  {
+    Reroot(min_width, min_height, root -> right, w, h, root -> slice, 'R');
+    Reroot(min_width, min_height, root -> right, w, h, root -> slice, 'L');
+  }
+  else
+  {
+    Reroot(min_width, min_height, root -> left, w, h, root -> slice, 'L');
+    Reroot(min_width, min_height, root -> left, w, h, root -> slice, 'R');
+  }
 }
