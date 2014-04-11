@@ -2,6 +2,7 @@
 #ifndef REROOT_H
 #define REROOT_H 
 
+// Binary Tree (With all the properties of the array in PA03)
 typedef struct _node {
   double x, y, width, height;
   struct _node * left;
@@ -9,6 +10,7 @@ typedef struct _node {
   char slice;
 } Node;
 
+// Stack structure
 typedef struct _item {
   struct _item * next;
   Node * item;
@@ -29,7 +31,7 @@ void Special_Post_Order(Node *);
 void Coordinates(Node *);
 
 // Screen dump
-void Screen_Dump(Node *);
+void Screen_Dump(Node *, double, double, double, double);
 void Pre_Order(Node *);
 void In_Order(Node *);
 void Post_Order(Node *);
@@ -38,6 +40,7 @@ void Post_Order(Node *);
 Node * Create_Node(double, double, char);
 void destroy_Tree(Node *);
 
+// Rerooting Process
 void Reroot(double *, double *, Node *, double, double, char, char);
-Node * Make_Dummy(Node *);
+
 #endif /* REROOT_H */
