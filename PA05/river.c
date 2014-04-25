@@ -53,7 +53,7 @@ int Load_File(char * input)
   
   for(i = 0; i < (2 * num * (num - 1)); i += num)
   {
-    temp = Dijkstra(&data[i]) + (1 - data[i].branch);
+    temp = Dijkstra(&data[i], data) + (1 - data[i].branch);
 
     if(temp < best)
     {
@@ -135,6 +135,7 @@ Node * Create_Graph(int num, FILE * fptr)
 
   for(i = 0; i < (num * (num - 1)); i++)
   {
+    data[i].distance = 10 * num;
     if(i % num == 0)
     {
       // Change to left bank
@@ -146,6 +147,7 @@ Node * Create_Graph(int num, FILE * fptr)
   // Make the nodes connecting to the outside of the graph negligible
   for(i = (num * (num - 1)); i < (2 * num * (num - 1)); i++)
   {
+    data[i].distance = 10 * num;
     if(i % num == 0)
     {
       data[i].trw = -1;
@@ -212,7 +214,7 @@ void Weights_Left(Node * data, int num)
   }
 }
 
-int Dijkstra(Node * data)
+int Dijkstra(Node * data, Node * start)
 {
   return 0;
 }
