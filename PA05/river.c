@@ -81,6 +81,12 @@ Node * Create_Graph(int num, FILE * fptr)
 
   for(i = (num * (num - 1)); i < (2 * num * (num - 1)); i++)
   {
+    data[i].tl = (i % num - 1) * num + i / (num * num);
+    data[i].tr = data[i].tl + 1;
+
+    data[i].bl = (i % num) * num + i / (num * num);
+    data[i].br = data[i].bl + 1;
+
     if(i % num == 0)
     {
       data[i].tl = -1;
