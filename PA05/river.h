@@ -2,11 +2,8 @@
 #define RIVER_H
 
 typedef struct _node {
-  struct _node * tl;
-  struct _node * tr;
-  struct _node * bl;
-  struct _node * br;
-  int plank;
+  int tr, tl, bl, br, trw, tlw, blw, brw;
+  int branch;
 } Node;
 
 Node * Load_File(char *);

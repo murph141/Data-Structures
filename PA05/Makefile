@@ -19,7 +19,7 @@ $(EXECUTABLE): $(OBJS) $(HDRS)
 	$(GCC) $(CFLAGS) -c $*.c
 
 test: all
-	$(VALGRIND) ./$(EXECUTABLE) r0.po output
+	$(VALGRIND) ./$(EXECUTABLE) test
 
 latex: $(LATEX).tex
 	pdflatex $(LATEX)
