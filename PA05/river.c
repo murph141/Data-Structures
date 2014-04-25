@@ -31,7 +31,7 @@ Node * Load_File(char * input)
 
   if(fptr == NULL)
   {
-    printf("Error: Memory Allocation Failed!\n");
+    printf("Error: Failed to open file!\n");
     return NULL;
   }
 
@@ -43,18 +43,23 @@ Node * Load_File(char * input)
 
   data = Create_Graph(num, fptr);
 
-  fclose(fptr);
+  //int best = 2 * num;
+
+  //Dijkstra(data, &num);
 
   return data;
 }
 
 
+// Creates the entire graph
 Node * Create_Graph(int num, FILE * fptr)
 {
-  Node * data = malloc(sizeof(Node) * (2 * num * (num - 1)));
+  Node * data = calloc(sizeof(Node) * (2 * num * (num - 1)), sizeof(Node));
 
   int i;
 
+  // Iterate over the first set of nodes
+  // Scan in the values of the planks (branches)
   for(i = 0; i < (num * (num - 1)); i++)
   {
     fscanf(fptr, "%d", &data[i].branch);
@@ -79,6 +84,9 @@ Node * Create_Graph(int num, FILE * fptr)
     }
   }
 
+  fclose(fptr);
+
+  // Iterate over the second set of nodes
   for(i = (num * (num - 1)); i < (2 * num * (num - 1)); i++)
   {
     data[i].tl = (i % num - 1) * num + i / (num * num);
@@ -99,5 +107,85 @@ Node * Create_Graph(int num, FILE * fptr)
     }
   }
 
+  // Add in the weights of the edges
+  Weights_Right(data, num);
+  Weights_Left(data, num);
+
+  for(i = 0; i < (num * (num - 1)); i++)
+  {
+    if(i % num == 0)
+    {
+      // Change to left bank
+      data[i].blw = -1;
+      data[i].tlw = -1;
+    }
+  }
+
+  // Make the nodes connecting to the outside of the graph negligible
+  for(i = (num * (num - 1)); i < (2 * num * (num - 1)); i++)
+  {
+    if(i % num == 0)
+    {
+      data[i].trw = -1;
+      data[i].tlw = -1;
+    }
+    else if(i % num == (num - 1))
+    {
+      data[i].blw = -1;
+      data[i].brw = -1;
+    }
+  }
+
   return data;
+}
+
+
+// Calcuate the weights of the edges that move from left to right
+void Weights_Right(Node * data, int num)
+{
+  int i;
+
+  // Iterate over the edges
+  for(i = 0; i < (2 * num * (num - 1)); i++)
+  {
+    data[i].trw = 1;
+    data[i].brw = 1;
+
+    if(data[i].tr != -1 && data[data[i].tr].branch == 1)
+    {
+      data[i].trw = 0;
+    }
+
+    if(data[i].br != -1 && data[data[i].br].branch == 1)
+    {
+      data[i].brw = 0;
+    }
+  }
+}
+
+
+// Calcuate the weights of the edges that move from right to left
+void Weights_Left(Node * data, int num)
+{
+  int i;
+
+  // Iterate over the edges
+  for(i = 0; i < (2 * num * (num - 1)); i++)
+  {
+    data[i].tlw = 1;
+    data[i].blw = 1;
+
+    if(data[i].tl != -1)
+    {
+      if(data[data[i].tl].branch == 1)
+      {
+        data[i].tlw = 0;
+      }
+    }
+
+    if(data[i].bl != -1 && data[data[i].bl].branch == 1)
+    {
+      data[i].blw = 0;
+    }
+  }
 }

@@ -9,4 +9,7 @@ typedef struct _node {
 Node * Load_File(char *);
 Node * Create_Graph(int, FILE *);
 
+void Weights_Right(Node *, int);
+void Weights_Left(Node *, int);
+
 #endif // RIVER_H

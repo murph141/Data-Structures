@@ -5,7 +5,7 @@ OBJS = $(SOURCES:.c=.o)
 HDRS = river.h
 EXECUTABLE = proj5
 LOGFILE = log
-VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose --log-file=$(LOGFILE)
+VALGRIND = valgrind --tool=memcheck --leak-check=full --verbose --log-file=$(LOGFILE) --track-origins=yes
 LATEX = WriteUp
 
 .PHONY: all clean test latex
