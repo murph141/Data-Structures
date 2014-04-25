@@ -6,10 +6,11 @@ typedef struct _node {
   int branch;
 } Node;
 
-Node * Load_File(char *);
+int Load_File(char *);
 Node * Create_Graph(int, FILE *);
 
 void Weights_Right(Node *, int);
 void Weights_Left(Node *, int);
+int Dijkstra(Node *);
 
 #endif // RIVER_H

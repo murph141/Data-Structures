@@ -12,27 +12,27 @@ int main(int argc, char * argv[])
 
   char * input = argv[1];
 
-  Node * data = Load_File(input);
+  int best = Load_File(input);
 
-  if(data == NULL)
+  if(best == -1)
   {
     return EXIT_FAILURE;
   }
 
-  free(data);
+  printf("%d\n", best);
 
   return EXIT_SUCCESS; // WE'VE SUCCEEDED!!!!!
 }
 
 
-Node * Load_File(char * input)
+int Load_File(char * input)
 {
   FILE * fptr = fopen(input, "r");
 
   if(fptr == NULL)
   {
-    printf("Error: Failed to open file!\n");
-    return NULL;
+    printf("Error: Failed to Open File!\n");
+    return -1;
   }
 
   int num;
@@ -43,11 +43,27 @@ Node * Load_File(char * input)
 
   data = Create_Graph(num, fptr);
 
-  //int best = 2 * num;
+  if(data == NULL)
+  {
+    return -1;
+  }
 
-  //Dijkstra(data, &num);
+  int i, temp;
+  int best = 2 * num;
+  
+  for(i = 0; i < (2 * num * (num - 1)); i += num)
+  {
+    temp = Dijkstra(&data[i]) + (1 - data[i].branch);
 
-  return data;
+    if(temp < best)
+    {
+      best = temp;
+    }
+  }
+  // All errors need to free data from here on out
+  free(data);
+
+  return best; // Change to the number here
 }
 
 
@@ -55,6 +71,12 @@ Node * Load_File(char * input)
 Node * Create_Graph(int num, FILE * fptr)
 {
   Node * data = calloc(sizeof(Node) * (2 * num * (num - 1)), sizeof(Node));
+
+  if(data == NULL)
+  {
+    printf("Error: Memory Allocation Failed!\n");
+    return NULL;
+  }
 
   int i;
 
@@ -84,7 +106,7 @@ Node * Create_Graph(int num, FILE * fptr)
     }
   }
 
-  fclose(fptr);
+  fclose(fptr); //File I/O is finished
 
   // Iterate over the second set of nodes
   for(i = (num * (num - 1)); i < (2 * num * (num - 1)); i++)
@@ -188,4 +210,9 @@ void Weights_Left(Node * data, int num)
       data[i].blw = 0;
     }
   }
+}
+
+int Dijkstra(Node * data)
+{
+  return 0;
 }
