@@ -84,7 +84,21 @@ Node * Create_Graph(int num, FILE * fptr)
   // Scan in the values of the planks (branches)
   for(i = 0; i < (num * (num - 1)); i++)
   {
-    fscanf(fptr, "%d", &data[i].branch);
+    char a = fgetc(fptr);
+
+    if(a == '\n')
+    {
+      a = fgetc(fptr);
+    }
+
+    if(a == 49)
+    {
+      data[i].branch = 1;
+    }
+    else
+    {
+      data[i].branch = 0;
+    }
 
     data[i].tr = num * (num - 1) + i / num + (i % num) * num;
     data[i].br = data[i].tr + 1;
@@ -267,27 +281,26 @@ int Dijkstra(int start, Node * arr, int num)
 
   Heap * PQ = calloc(sizeof(Heap) * (2 * num * (num - 1) - 1), sizeof(Heap));
 
+  int distance[2 * num * (num - 1)];
+
   int size = 2 * num * (num - 1);
 
   for(i = 0; i < (2 * num * (num - 1)); i++)
   {
     PQ[i].dist = num * num;
     PQ[i].nn = i;
+    distance[i] = num * num;
   }
 
   int curr = start;
 
   PQ[curr].dist = 0;
+  
+  distance[curr] = 0;
 
   while(size != 0)
   {
     Check_Dist(arr, PQ, curr);
-
-    /*for(j = size / 2 - 1; j >= 0; j--)
-    {
-      Downward_Heapify(PQ, i, size - 1);
-    }
-    */
 
     for(j = size - 1; j > 0; j--)
     {
@@ -305,10 +318,12 @@ int Dijkstra(int start, Node * arr, int num)
       Downward_Heapify(PQ, 0, j - 1);
     }
 
+    /*
     if(curr == start)
     {
       size--;
     }
+    */
 
     int u = Extract_Min(PQ, size--);
 
@@ -316,49 +331,49 @@ int Dijkstra(int start, Node * arr, int num)
 
     if(arr[u].tr != -1)
     {
-      if(IsInPQ(arr[u].tr, PQ, size) && (PQ[arr[u].tr].dist > (PQ[u].dist + arr[u].trw)))
+      if(IsInPQ(arr[u].tr, PQ, size) && (distance[arr[u].tr] > (distance[u] + arr[u].trw)))
       {
-        PQ[arr[u].tr].dist = PQ[u].dist + arr[u].trw;
-      }
-    }
-
-    if(arr[u].br != -1)
-    {
-      if(IsInPQ(arr[u].br, PQ, size) && (PQ[arr[u].br].dist > (PQ[u].dist + arr[u].brw)))
-      {
-        PQ[arr[u].br].dist = PQ[u].dist + arr[u].brw;
+        distance[arr[u].tr] = distance[u] + arr[u].trw;
       }
     }
 
     if(arr[u].tl != -1)
     {
-      if(IsInPQ(arr[u].tl, PQ, size) && (PQ[arr[u].tl].dist > (PQ[u].dist + arr[u].tlw)))
+      if(IsInPQ(arr[u].tl, PQ, size) && (distance[arr[u].tl] > (distance[u] + arr[u].tlw)))
       {
-        PQ[arr[u].tl].dist = PQ[u].dist + arr[u].tlw;
+        distance[arr[u].tl] = distance[u] + arr[u].tlw;
+      }
+    }
+
+    if(arr[u].br != -1)
+    {
+      if(IsInPQ(arr[u].br, PQ, size) && (distance[arr[u].br] > (distance[u] + arr[u].brw)))
+      {
+        distance[arr[u].br] = distance[u] + arr[u].brw;
       }
     }
 
     if(arr[u].bl != -1)
     {
-      if(IsInPQ(arr[u].bl, PQ, size) && (PQ[arr[u].bl].dist > (PQ[u].dist + arr[u].blw)))
+      if(IsInPQ(arr[u].bl, PQ, size) && (distance[arr[u].bl] > (distance[u] + arr[u].blw)))
       {
-        PQ[arr[u].bl].dist = PQ[u].dist + arr[u].blw;
+        distance[arr[u].bl] = distance[u] + arr[u].blw;
       }
     }
 
     if(arr[u].up != -1)
     {
-      if(IsInPQ(arr[u].up, PQ, size) && (PQ[arr[u].up].dist > (PQ[u].dist + arr[u].upw)))
+      if(IsInPQ(arr[u].up, PQ, size) && (distance[arr[u].up] > (distance[u] + arr[u].upw)))
       {
-        PQ[arr[u].up].dist = PQ[u].dist + arr[u].upw;
+        distance[arr[u].up] = distance[u] + arr[u].upw;
       }
     }
 
     if(arr[u].dn != -1)
     {
-      if(IsInPQ(arr[u].dn, PQ, size) && (PQ[arr[u].dn].dist > (PQ[u].dist + arr[u].dnw)))
+      if(IsInPQ(arr[u].dn, PQ, size) && (distance[arr[u].dn] > (distance[u] + arr[u].dnw)))
       {
-        PQ[arr[u].dn].dist = PQ[u].dist + arr[u].dnw;
+        distance[arr[u].dn] = distance[u] + arr[u].dnw;
       }
     }
   }
@@ -367,9 +382,9 @@ int Dijkstra(int start, Node * arr, int num)
 
   for(k = num - 1; k < (num * (num - 1)); k += num)
   {
-    if(PQ[k].dist < best)
+    if(distance[k] < best)
     {
-      best = PQ[k].dist;
+      best = distance[k];
     }
   }
 
