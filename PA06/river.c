@@ -27,6 +27,7 @@ int main(int argc, char * argv[])
 }
 
 
+// Loads the file and later creates the graph
 int Load_File(char * input)
 {
   FILE * fptr = fopen(input, "r");
@@ -50,9 +51,10 @@ int Load_File(char * input)
     return -1;
   }
 
-  int best = num * 2;
+  int best = Dijkstra(data);
 
-  // May need to add one to account for missing 1 earlier
+  FreeData(data);
+
   return best; // Change to the number here
 }
 
@@ -68,8 +70,6 @@ Node * Create_Graph(FILE * fptr)
 
     if(a == 49 && ones++);
   }
-
-  printf("%d\n", ones);
 
   fseek(fptr, 0, SEEK_SET);
 
@@ -143,8 +143,7 @@ void Calculate_Distance(Node * data, int nodes)
 {
   int index, inner;
 
-  // Calculate distances for the banks
-
+  // Calculate distances
   for(index = 0; index < nodes; index++)
   {
     for(inner = 0; inner < (nodes - 1); inner++)
@@ -198,8 +197,6 @@ void Calculate_Distance(Node * data, int nodes)
       }
     }
   }
-
-  //Cone(data, nodes - 2);
 }
 
 
@@ -213,4 +210,163 @@ int IsInCone(int x1, int y1, int x2, int y2)
   }
 
   return 0;
+}
+
+
+
+int Dijkstra(Node * data)
+{
+  int index, u, j, distance;
+  int nodes = ones + 2; 
+
+  Heap * PQ = calloc(nodes, sizeof(Heap));
+
+  for(index = 0; index < nodes; index++)
+  {
+    PQ[index].number = index;
+    PQ[index].dist = num * num;
+  }
+
+  PQ[nodes - 2].dist = 0;
+
+  // Perform downward heapify
+  for(j = nodes - 1; j > 0; j--)
+  {
+    swap(PQ, j, 0);
+
+    Downward_Heapify(PQ, 0, j - 1);
+  }
+  
+  while(nodes > 0)
+  {
+    u = Extract_Min(PQ, nodes);
+
+    if(u == (ones + 1))
+    {
+      distance = PQ[0].dist;
+
+      free(PQ);
+      return distance;
+    }
+
+    nodes--;
+
+    Check_Adjacent(PQ, data, u, nodes);
+  }
+
+  free(PQ);
+  return -1;
+}
+
+
+int Extract_Min(Heap * PQ, int nodes)
+{
+  int temp = PQ[0].number;
+
+  swap(PQ, 0, nodes - 1);
+
+  Downward_Heapify(PQ, 0, nodes - 2);
+
+  return temp;
+}
+
+void Downward_Heapify(Heap * PQ, int i, int n)
+{
+  int temp = PQ[i].dist;
+  int temp2 = PQ[i].number;
+
+  int j;
+
+  while((j = 2 * i + 1) <= n)
+  {
+    if(j < n && PQ[j].dist < PQ[j + 1].dist)
+    {
+      j++;
+    }
+
+    if(temp >= PQ[j].dist)
+    {
+      break;
+    }
+    else
+    {
+      swap(PQ, i, j);
+      i = j;
+    }
+  }
+
+  PQ[i].dist = temp;
+  PQ[i].number = temp2;
+}
+
+void Check_Adjacent(Heap * PQ, Node * data, int u, int nodes)
+{
+  int i, j, totalnodes = ones + 1;
+  int temp, location;
+
+  for(i = 0, j = 0; i < totalnodes; i++, j++)
+  {
+    if(j == u)
+    {
+      j++;
+    }
+
+    temp = data[u].dist[i];
+    
+    location = FindPQ(PQ, j, nodes);
+
+    if(PQ[location].dist > PQ[nodes].dist + temp)
+    {
+      PQ[location].dist = PQ[nodes].dist + temp;
+    }
+  }
+
+  for(j = nodes - 1; j > 0; j--)
+  {
+    swap(PQ, j, 0);
+
+    Downward_Heapify(PQ, 0, j - 1);
+  }
+}
+
+
+void swap(Heap * h1, int i1, int i2)
+{
+  int t1 = h1[i1].dist;
+  int t2 = h1[i1].number;
+
+  h1[i1].dist = h1[i2].dist;
+  h1[i1].number= h1[i2].number;
+
+  h1[i2].dist = t1;
+  h1[i2].number = t2;
+}
+
+int FindPQ(Heap * PQ, int needle, int total)
+{
+  int i;
+
+  for(i = 0; i < total; i++)
+  {
+    if(PQ[i].number == needle)
+    {
+      return i;
+    }
+  }
+  
+  return i;
+}
+
+
+void FreeData(Node * data)
+{
+  int i;
+
+  for(i = 0; i < (ones + 2); i++)
+  {
+    free(data[i].adj);
+    free(data[i].dist);
+  }
+
+  free(data);
 }
