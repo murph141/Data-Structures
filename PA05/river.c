@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #include "river.h"
 
+int ones = 0, num;
+
 int main(int argc, char * argv[])
 {
   if(argc != 2)
@@ -25,6 +27,7 @@ int main(int argc, char * argv[])
 }
 
 
+// Loads the file and later creates the graph
 int Load_File(char * input)
 {
   FILE * fptr = fopen(input, "r");
@@ -35,490 +38,335 @@ int Load_File(char * input)
     return -1;
   }
 
-  int num;
-
   fscanf(fptr, "%d", &num);
 
   Node * data;
 
-  data = Create_Graph(num, fptr);
+  data = Create_Graph(fptr);
+
+  Calculate_Distance(data, ones + 2);
 
   if(data == NULL)
   {
     return -1;
   }
 
-  int i, temp;
-  int best = 2 * num;
+  int best = Dijkstra(data);
 
-  for(i = 0; i < (2 * num * (num - 1)); i += num)
-  {
-    temp = Dijkstra(i, data, num) + (1 - data[i].branch);
-
-    if(temp < best)
-    {
-      best = temp;
-    }
-  }
-  // All errors need to free data from here on out
-  free(data);
+  FreeData(data);
 
   return best; // Change to the number here
 }
 
 
 // Creates the entire graph
-Node * Create_Graph(int num, FILE * fptr)
+Node * Create_Graph(FILE * fptr)
 {
-  Node * data = calloc(sizeof(Node) * (2 * num * (num - 1)), sizeof(Node));
+  char a = 0;
 
-  if(data == NULL)
+  while(a != EOF)
   {
-    printf("Error: Memory Allocation Failed!\n");
-    return NULL;
+    a = fgetc(fptr);
+
+    if(a == 49 && ones++);
   }
 
-  int i;
+  fseek(fptr, 0, SEEK_SET);
 
-  // Iterate over the first set of nodes
-  // Scan in the values of the planks (branches)
-  for(i = 0; i < (num * (num - 1)); i++)
+  a = fgetc(fptr);
+
+  while(a != '\n')
   {
-    char a = fgetc(fptr);
+    a = fgetc(fptr);
+  }
+
+  Node * data = calloc(ones + 2, sizeof(Node));
+
+  int col = 0, row = 0, index = 0;
+
+  while(a != EOF)
+  {
+    a = fgetc(fptr);
 
     if(a == '\n')
     {
-      a = fgetc(fptr);
+      row++;
+      col = -1;
     }
 
     if(a == 49)
     {
-      data[i].branch = 1;
-    }
-    else
-    {
-      data[i].branch = 0;
+      data[index].x = col;
+      data[index].y = row;
+      index++;
     }
 
-    data[i].tr = num * (num - 1) + i / num + (i % num) * num;
-    data[i].br = data[i].tr + 1;
-
-    data[i].tl = num * (num - 1) + (i % num - 1) * num + i / num;
-    data[i].bl = data[i].tl + 1;
-
-    data[i].up = i - num;
-    data[i].dn = i + num;
-
-    if(i % num == 0)
-    {
-      // Change to left bank
-      data[i].bl = -1;
-      data[i].tl = -1;
-    }
-    else if(i % num == (num - 1))
-    {
-      // Change to right bank
-      data[i].br = -1;
-      data[i].tr = -1;
-    }
-
-    if(i / num == 0)
-    {
-      data[i].up = -1;
-    }
-    else if(i / num == (num - 2))
-    {
-      data[i].dn = -1;
-    }
+    col++;
   }
 
-  fclose(fptr); //File I/O is finished
+  fclose(fptr);
 
-  // Iterate over the second set of nodes
-  for(i = (num * (num - 1)); i < (2 * num * (num - 1)); i++)
-  {
-    data[i].tl = (i % num - 1) * num + i / (num * num);
-    data[i].tr = data[i].tl + 1;
+  data[ones].x = -1;
+  data[ones].y = -1;
 
-    data[i].bl = (i % num) * num + i / (num * num);
-    data[i].br = data[i].bl + 1;
+  data[ones + 1].x = -1;
+  data[ones + 1].y = -1;
 
-    if(i % num == 0)
-    {
-      data[i].tl = -1;
-      data[i].tr = -1;
-    }
-    else if(i % num == (num -1))
-    {
-      data[i].bl = -1;
-      data[i].br = -1;
-    }
-  }
-
-  // Add in the weights of the edges
-  Weights_Right(data, num);
-  Weights_Left(data, num);
-
-  for(i = 0; i < (num * (num - 1)); i++)
-  {
-    if(data[i].up != -1)
-    {
-      if(data[data[i].up].branch == 1)
-      {
-        data[i].upw = 0;
-      }
-      else
-      {
-        data[i].upw = num * num;
-      }
-    }
-    else
-    {
-      data[i].upw = num * num;
-    }
-
-    if(data[i].dn != -1)
-    {
-      if(data[data[i].dn].branch == 1)
-      {
-        data[i].dnw = 0;
-      }
-      else
-      {
-        data[i].dnw = num * num;
-      }
-    }
-    else
-    {
-      data[i].dnw = num * num;
-    }
-  }
-
-  for(i = 0; i < (num * (num - 1)); i++)
-  {
-    //data[i].distance = num * num;
-    if(i % num == 0)
-    {
-      // Change to left bank
-      data[i].blw = -1;
-      data[i].tlw = -1;
-    }
-  }
-
-  // Make the nodes connecting to the outside of the graph negligible
-  for(i = (num * (num - 1)); i < (2 * num * (num - 1)); i++)
-  {
-    //data[i].distance = num * num;
-    if(i % num == 0)
-    {
-      data[i].trw = -1;
-      data[i].tlw = -1;
-    }
-    else if(i % num == (num - 1))
-    {
-      data[i].blw = -1;
-      data[i].brw = -1;
-    }
-  }
+  Create_Adjacency(data, ones + 2);
 
   return data;
 }
 
 
-// Calcuate the weights of the edges that move from left to right
-void Weights_Right(Node * data, int num)
+void Create_Adjacency(Node * data, int nodes)
 {
-  int i;
+  int i, j, index;
 
-  // Iterate over the edges
-  for(i = 0; i < (2 * num * (num - 1)); i++)
+  for(i = 0; i < nodes; i++)
   {
-    data[i].trw = 1;
-    data[i].brw = 1;
+    data[i].adj = malloc(sizeof(int) * (nodes - 1));
+    data[i].dist = calloc(nodes - 1, sizeof(int));
+    index = 0;
 
-    if(data[i].tr != -1 && data[data[i].tr].branch == 1)
+    for(j = 0; j < nodes; j++)
     {
-      data[i].trw = 0;
-    }
-
-    if(data[i].br != -1 && data[data[i].br].branch == 1)
-    {
-      data[i].brw = 0;
+      if(i != j)
+      {
+        data[i].adj[index++] = j;
+      }
     }
   }
 }
 
 
-// Calcuate the weights of the edges that move from right to left
-void Weights_Left(Node * data, int num)
+void Calculate_Distance(Node * data, int nodes)
 {
-  int i;
+  int index, inner;
 
-  // Iterate over the edges
-  for(i = 0; i < (2 * num * (num - 1)); i++)
+  // Calculate distances
+  for(index = 0; index < nodes; index++)
   {
-    data[i].tlw = 1;
-    data[i].blw = 1;
-
-    if(data[i].tl != -1)
+    for(inner = 0; inner < (nodes - 1); inner++)
     {
-      if(data[data[i].tl].branch == 1)
+      if(index == (nodes - 2))
       {
-        data[i].tlw = 0;
+        if(inner == (nodes - 2))
+        {
+          data[index].dist[inner] = 2 * num;
+        }
+        else
+        {
+          data[index].dist[inner] = 2 * data[data[index].adj[inner]].x;
+        }
       }
-    }
+      else if(index == (nodes - 1))
+      {
+        if(inner == (nodes - 2))
+        {
+          data[index].dist[inner] = 2 * num;
+        }
+        else
+        {
+          data[index].dist[inner] = 2 * (num - 1 - data[data[index].adj[inner]].x);
+        }
+      }
+      else
+      {
+        if(inner == (nodes - 3))
+        {
+          data[index].dist[inner] = 2 * data[index].x + 1;
+        }
+        else if (inner == (nodes - 2))
+        {
+          data[index].dist[inner] = 2 * (num - 1 - data[index].x) + 1;
+        }
+        else
+        {
+          // Non-bank nodes
+          if(IsInCone(data[index].x, data[index].y, data[data[index].adj[inner]].x, data[data[index].adj[inner]].y))
+          {
+            data[index].dist[inner] = 2 * abs(data[data[index].adj[inner]].x - data[index].x) - 1;
+          }
+          else
+          {
+            int changey = abs(data[data[index].adj[inner]].y - data[index].y);
 
-    if(data[i].bl != -1 && data[data[i].bl].branch == 1)
-    {
-      data[i].blw = 0;
+            data[index].dist[inner] = 2 * (changey - 1);
+          }
+        }
+      }
     }
   }
 }
 
-int Dijkstra(int start, Node * arr, int num)
+
+int IsInCone(int x1, int y1, int x2, int y2)
 {
-  int i, j;
+  int difference = abs(x1 - x2);
 
-  Heap * PQ = calloc(sizeof(Heap) * (2 * num * (num - 1) - 1), sizeof(Heap));
-
-  int distance[2 * num * (num - 1)];
-
-  int size = 2 * num * (num - 1);
-
-  for(i = 0; i < (2 * num * (num - 1)); i++)
+  if(y1 - difference <= y2 && y1 + difference >= y2)
   {
-    PQ[i].dist = num * num;
-    PQ[i].nn = i;
-    distance[i] = num * num;
+    return 1;
   }
 
-  int curr = start;
+  return 0;
+}
 
-  PQ[curr].dist = 0;
 
-  distance[curr] = 0;
 
-  while(size != 0)
+int Dijkstra(Node * data)
+{
+  int index, u, j, distance;
+  int nodes = ones + 2; 
+
+  Heap * PQ = calloc(nodes, sizeof(Heap));
+
+  for(index = 0; index < nodes; index++)
   {
-    Check_Dist(arr, PQ, curr);
-
-    for(j = size - 1; j > 0; j--)
-    {
-      int temp1, temp2;
-
-      temp1 = PQ[j].dist;
-      temp2 = PQ[j].nn;
-
-      PQ[j].dist = PQ[0].dist;
-      PQ[j].nn = PQ[0].nn;
-
-      PQ[0].nn = temp2;
-      PQ[0].dist = temp1;
-
-      Downward_Heapify(PQ, 0, j - 1);
-    }
-
-    if(curr == start)
-    {
-      size--;
-    }
-
-    int u = Extract_Min(PQ, size--);
-
-    curr = u;
-
-    if(arr[u].tr != -1)
-    {
-      if(IsInPQ(arr[u].tr, PQ, size) && (distance[arr[u].tr] > (distance[u] + arr[u].trw)))
-      {
-        distance[arr[u].tr] = distance[u] + arr[u].trw;
-      }
-    }
-
-    if(arr[u].tl != -1)
-    {
-      if(IsInPQ(arr[u].tl, PQ, size) && (distance[arr[u].tl] > (distance[u] + arr[u].tlw)))
-      {
-        distance[arr[u].tl] = distance[u] + arr[u].tlw;
-      }
-    }
-
-    if(arr[u].br != -1)
-    {
-      if(IsInPQ(arr[u].br, PQ, size) && (distance[arr[u].br] > (distance[u] + arr[u].brw)))
-      {
-        distance[arr[u].br] = distance[u] + arr[u].brw;
-      }
-    }
-
-    if(arr[u].bl != -1)
-    {
-      if(IsInPQ(arr[u].bl, PQ, size) && (distance[arr[u].bl] > (distance[u] + arr[u].blw)))
-      {
-        distance[arr[u].bl] = distance[u] + arr[u].blw;
-      }
-    }
-
-    if(arr[u].up != -1)
-    {
-      if(IsInPQ(arr[u].up, PQ, size) && (distance[arr[u].up] > (distance[u] + arr[u].upw)))
-      {
-        distance[arr[u].up] = distance[u] + arr[u].upw;
-      }
-    }
-
-    if(arr[u].dn != -1)
-    {
-      if(IsInPQ(arr[u].dn, PQ, size) && (distance[arr[u].dn] > (distance[u] + arr[u].dnw)))
-      {
-        distance[arr[u].dn] = distance[u] + arr[u].dnw;
-      }
-    }
+    PQ[index].number = index;
+    PQ[index].dist = num * num;
   }
 
-  int k, best = 2 * num;
+  PQ[nodes - 2].dist = 0;
 
-  for(k = num - 1; k < (num * (num - 1)); k += num)
+  // Perform downward heapify
+  for(j = nodes - 1; j > 0; j--)
   {
-    if(distance[k] < best)
+    swap(PQ, j, 0);
+
+    Downward_Heapify(PQ, 0, j - 1);
+  }
+  
+  while(nodes > 0)
+  {
+    u = Extract_Min(PQ, nodes);
+
+    if(u == (ones + 1))
     {
-      best = distance[k];
+      distance = PQ[0].dist;
+
+      free(PQ);
+      return distance;
     }
+
+    nodes--;
+
+    Check_Adjacent(PQ, data, u, nodes);
   }
 
   free(PQ);
-
-  return best;
+  return -1;
 }
 
-void Check_Dist(Node * arr, Heap * PQ,  int start)
+
+int Extract_Min(Heap * PQ, int nodes)
 {
-  if(arr[start].tr != -1)
-  {
-    if(PQ[arr[start].tr].dist > PQ[start].dist + arr[start].trw)
-    {
-      PQ[arr[start].tr].dist = PQ[start].dist + arr[start].trw;
-    }
-  }
+  int temp = PQ[0].number;
 
-  if(arr[start].tl != -1)
-  {
-    if( PQ[arr[start].tl].dist > PQ[start].dist + arr[start].tlw)
-    {
-      PQ[arr[start].tl].dist = PQ[start].dist + arr[start].tlw;
-    }
-  }
+  swap(PQ, 0, nodes - 1);
 
-  if(arr[start].br != -1)
-  {
-    if( PQ[arr[start].br].dist > PQ[start].dist + arr[start].brw)
-    {
-      PQ[arr[start].br].dist = PQ[start].dist + arr[start].brw;
-    }
-  }
+  Downward_Heapify(PQ, 0, nodes - 2);
 
-  if(arr[start].bl != -1)
-  {
-    if( PQ[arr[start].bl].dist > PQ[start].dist + arr[start].blw)
-    {
-      PQ[arr[start].bl].dist = PQ[start].dist + arr[start].blw;
-    }
-  }
-
-  if(arr[start].up != -1)
-  {
-    if( PQ[arr[start].up].dist > PQ[start].dist + arr[start].upw)
-    {
-      PQ[arr[start].up].dist = PQ[start].dist + arr[start].upw;
-    }
-  }
-
-  if(arr[start].dn != -1)
-  {
-    if( PQ[arr[start].dn].dist > PQ[start].dist + arr[start].dnw)
-    {
-      PQ[arr[start].dn].dist = PQ[start].dist + arr[start].dnw;
-    }
-  }
+  return temp;
 }
 
-void Downward_Heapify(Heap * arr, int i, int n)
+void Downward_Heapify(Heap * PQ, int i, int n)
 {
+  int temp = PQ[i].dist;
+  int temp2 = PQ[i].number;
+
   int j;
-  int temp = arr[i].dist;
-  int temp2 = arr[i].nn;
 
   while((j = 2 * i + 1) <= n)
   {
-    if(j < n && arr[j].dist < arr[j+1].dist)
+    if(j < n && PQ[j].dist < PQ[j + 1].dist)
     {
       j++;
     }
 
-    if(temp >= arr[j].dist)
+    if(temp >= PQ[j].dist)
     {
       break;
     }
     else
     {
-      arr[i].dist = arr[j].dist;
-      arr[i].nn = arr[j].nn;
+      swap(PQ, i, j);
       i = j;
     }
   }
 
-  arr[i].dist = temp;
-  arr[i].nn = temp2;
+  PQ[i].dist = temp;
+  PQ[i].number = temp2;
 }
 
-
-int Extract_Min(Heap * PQ, int size)
+void Check_Adjacent(Heap * PQ, Node * data, int u, int nodes)
 {
-  int temp1, temp2;
+  int i, j, totalnodes = ones + 1;
+  int temp, location;
 
-  temp1 = PQ[0].nn;
-  temp2 = PQ[0].dist;
-
-  PQ[0].nn = PQ[size - 1].nn;
-  PQ[0].dist = PQ[size - 1].dist;
-
-  PQ[size - 1].nn = temp1;
-  PQ[size - 1].dist = temp2;
-
-  //Downward_Heapify(PQ, 0, size - 2);
-
-  int j;
-
-  for(j = size - 2; j > 0; j--)
+  for(i = 0, j = 0; i < totalnodes; i++, j++)
   {
-    temp1 = PQ[j].dist;
-    temp2 = PQ[j].nn;
-
-    PQ[j].dist = PQ[0].dist;
-    PQ[j].nn = PQ[0].nn;
-
-    PQ[0].nn = temp2;
-    PQ[0].dist = temp1;
-
-    Downward_Heapify(PQ, 0, j - 1);
-  }
-
-  return PQ[size - 1].nn;
-}
-
-
-int IsInPQ(int nn, Heap * PQ, int size)
-{
-  int i, check = 0;
-
-  for(i = 0; i < size; i++)
-  {
-    if(PQ[i].nn == nn)
+    if(j == u)
     {
-      check = 1;
-      break;
+      j++;
+    }
+
+    temp = data[u].dist[i];
+    
+    location = FindPQ(PQ, j, nodes);
+
+    if(PQ[location].dist > PQ[nodes].dist + temp)
+    {
+      PQ[location].dist = PQ[nodes].dist + temp;
     }
   }
 
-  return check;
+  for(j = nodes - 1; j > 0; j--)
+  {
+    swap(PQ, j, 0);
+
+    Downward_Heapify(PQ, 0, j - 1);
+  }
+}
+
+
+void swap(Heap * h1, int i1, int i2)
+{
+  int t1 = h1[i1].dist;
+  int t2 = h1[i1].number;
+
+  h1[i1].dist = h1[i2].dist;
+  h1[i1].number= h1[i2].number;
+
+  h1[i2].dist = t1;
+  h1[i2].number = t2;
+}
+
+int FindPQ(Heap * PQ, int needle, int total)
+{
+  int i;
+
+  for(i = 0; i < total; i++)
+  {
+    if(PQ[i].number == needle)
+    {
+      return i;
+    }
+  }
+  
+  return i;
+}
+
+
+void FreeData(Node * data)
+{
+  int i;
+
+  for(i = 0; i < (ones + 2); i++)
+  {
+    free(data[i].adj);
+    free(data[i].dist);
+  }
+
+  free(data);
 }
