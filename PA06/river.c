@@ -175,11 +175,11 @@ void Calculate_Distance(Node * data, int nodes)
       {
         if(inner == (nodes - 3))
         {
-          data[index].dist[inner] = 2 * data[index].x;
+          data[index].dist[inner] = 2 * data[index].x + 1;
         }
         else if (inner == (nodes - 2))
         {
-          data[index].dist[inner] = 2 * (num - 1 - data[index].x);
+          data[index].dist[inner] = 2 * (num - 1 - data[index].x) + 1;
         }
         else
         {
@@ -190,21 +190,9 @@ void Calculate_Distance(Node * data, int nodes)
           }
           else
           {
-            // Have to check for both top and bottom
-            //if(data[index].y > data[data[index].adj[inner]].y)
-            //int changex = abs(data[data[index].adj[inner]].x - data[index].x);
             int changey = abs(data[data[index].adj[inner]].y - data[index].y);
 
-            //data[index].dist[inner] = 2 * changex + 2 * (changey - changex - 1);
             data[index].dist[inner] = 2 * (changey - 1);
-            /*
-               else
-               {
-               int changex = abs(data[data[index].adj[inner]].x - data[index].x);
-               int changey = abs(data[data[index].adj[inner]].y - data[index].y);
-               data[index].dist[inner] = 2 * changex + 2 * (changey - 2);
-               }
-               */
           }
         }
       }
@@ -219,7 +207,7 @@ int IsInCone(int x1, int y1, int x2, int y2)
 {
   int difference = abs(x1 - x2);
 
-  if(y1 - difference <= y2 && y1 + difference >= y2) // Used to be y2 + 1
+  if(y1 - difference <= y2 && y1 + difference >= y2)
   {
     return 1;
   }
