@@ -295,7 +295,7 @@ int Dijkstra(int start, Node * arr, int num)
   int curr = start;
 
   PQ[curr].dist = 0;
-  
+
   distance[curr] = 0;
 
   while(size != 0)
@@ -318,12 +318,10 @@ int Dijkstra(int start, Node * arr, int num)
       Downward_Heapify(PQ, 0, j - 1);
     }
 
-    /*
     if(curr == start)
     {
       size--;
     }
-    */
 
     int u = Extract_Min(PQ, size--);
 
@@ -397,32 +395,50 @@ void Check_Dist(Node * arr, Heap * PQ,  int start)
 {
   if(arr[start].tr != -1)
   {
-    PQ[arr[start].tr].dist = PQ[start].dist + arr[start].trw;
+    if(PQ[arr[start].tr].dist > PQ[start].dist + arr[start].trw)
+    {
+      PQ[arr[start].tr].dist = PQ[start].dist + arr[start].trw;
+    }
   }
 
   if(arr[start].tl != -1)
   {
-    PQ[arr[start].tl].dist = PQ[start].dist + arr[start].tlw;
+    if( PQ[arr[start].tl].dist > PQ[start].dist + arr[start].tlw)
+    {
+      PQ[arr[start].tl].dist = PQ[start].dist + arr[start].tlw;
+    }
   }
 
   if(arr[start].br != -1)
   {
-    PQ[arr[start].br].dist = PQ[start].dist + arr[start].brw;
+    if( PQ[arr[start].br].dist > PQ[start].dist + arr[start].brw)
+    {
+      PQ[arr[start].br].dist = PQ[start].dist + arr[start].brw;
+    }
   }
 
   if(arr[start].bl != -1)
   {
-    PQ[arr[start].bl].dist = PQ[start].dist + arr[start].blw;
+    if( PQ[arr[start].bl].dist > PQ[start].dist + arr[start].blw)
+    {
+      PQ[arr[start].bl].dist = PQ[start].dist + arr[start].blw;
+    }
   }
 
   if(arr[start].up != -1)
   {
-    PQ[arr[start].up].dist = PQ[start].dist + arr[start].upw;
+    if( PQ[arr[start].up].dist > PQ[start].dist + arr[start].upw)
+    {
+      PQ[arr[start].up].dist = PQ[start].dist + arr[start].upw;
+    }
   }
 
   if(arr[start].dn != -1)
   {
-    PQ[arr[start].dn].dist = PQ[start].dist + arr[start].dnw;
+    if( PQ[arr[start].dn].dist > PQ[start].dist + arr[start].dnw)
+    {
+      PQ[arr[start].dn].dist = PQ[start].dist + arr[start].dnw;
+    }
   }
 }
 
@@ -458,10 +474,34 @@ void Downward_Heapify(Heap * arr, int i, int n)
 
 int Extract_Min(Heap * PQ, int size)
 {
+  int temp1, temp2;
+
+  temp1 = PQ[0].nn;
+  temp2 = PQ[0].dist;
+
   PQ[0].nn = PQ[size - 1].nn;
   PQ[0].dist = PQ[size - 1].dist;
 
-  Downward_Heapify(PQ, 0, size - 2);
+  PQ[size - 1].nn = temp1;
+  PQ[size - 1].dist = temp2;
+
+  //Downward_Heapify(PQ, 0, size - 2);
+
+  int j;
+
+  for(j = size - 2; j > 0; j--)
+  {
+    temp1 = PQ[j].dist;
+    temp2 = PQ[j].nn;
+
+    PQ[j].dist = PQ[0].dist;
+    PQ[j].nn = PQ[0].nn;
+
+    PQ[0].nn = temp2;
+    PQ[0].dist = temp1;
+
+    Downward_Heapify(PQ, 0, j - 1);
+  }
 
   return PQ[size - 1].nn;
 }
